@@ -3,9 +3,10 @@ from type import *
 from lexer import Lexer
 
 # FUNCTION MAP
-# def: f(a, b, c)
-# def: a + b + c
-# f -> [
+# _def --> fun(a, b, c)
+# _def --> a + b + c
+# "fun" -> [
+#   "name" -> "fun"
 #   "params" -> [a, b, c],
 #   "expr" -> "a + b + c",
 #   "stack" -> [CALL STACK]
@@ -16,7 +17,8 @@ from lexer import Lexer
 # input_mode = 3 ; define mode body
 
 input_mode = 2;
-funs = []
+funs = {}
+last_fun = None
 
 class Interpreter():
     def __init__(self, lexer):
@@ -26,6 +28,9 @@ class Interpreter():
     def error(self, token_type):
         raise Exception("Expected {} but found {}".format(token_type, self.current_token.token_type))
 
+    def msg_error(self, msg):
+        raise Exception(msg)
+
     def eat(self, token_type):
         if self.current_token.token_type == token_type:
             self.current_token = self.lexer.get_next_token()
@@ -34,6 +39,34 @@ class Interpreter():
 
     def factor(self):
         token = self.current_token
+        
+        if token.token_type == FUN:
+            fun = token.value[0]
+            
+            if not fun["name"] in funs:
+                msg_error("Function not defined")
+            
+            fun_defined = funs[fun["name"]]
+            
+            if len(fun["params"]) != len(fun_defined["params"]):
+                self.msg_error("Calling function {} with {} instead of {} parameters".format(fun["name"], len(fun["params"]), len(fun_defined["params"])))
+            
+            pos = 0
+            expr = "(" + fun_defined["expr"] + ")"
+            fun = token.value[0]
+            fun_call = token.value[1]
+            
+            for param in fun_defined["params"]:
+                expr = expr.replace(param, fun["params"][pos])
+                pos += 1
+            
+            self.lexer.pos = self.lexer.text.find(fun_call) + 1
+            self.lexer.text = self.lexer.text.replace(fun_call, expr, 1)
+
+            print("TEXT: " + self.lexer.text + " " + self.lexer.text[self.lexer.pos:])
+            self.current_token = Token(LPAREN, "(")
+
+            return self.factor()
         if token.token_type == INTEGER:
             self.eat(INTEGER)
             return token.value
@@ -78,11 +111,23 @@ class Interpreter():
 
         return left        
 
-    def exprdef(self):
+    def define(self):
+        global funs, last_fun
         token = self.current_token
-        funs.append(token.value)
-        print(funs)
+        fun = token.value[0]
+
+        for param in fun["params"]:
+            if not param[0].isalpha():
+                self.msg_error("Parameter list must start with parameter")
+
+        funs[fun["name"]] = fun
+        last_fun = fun["name"]
         return token
+    
+    def define_body(self, text):
+        global funs, last_fun
+        if last_fun is not None:
+            funs[last_fun]["expr"] = text
 
 def main():
     global input_mode;
@@ -102,17 +147,19 @@ def main():
 
         if text == 'exit':
             break
-
-        lexer = Lexer(text)
-        intepreter = Interpreter(lexer)
-        
+         
         if input_mode == 1:
+            lexer = Lexer(text)
+            intepreter = Interpreter(lexer)
             result = intepreter.expr()
             print("<-- {}".format(result))
         elif input_mode == 2:
-            result = intepreter.exprdef()
+            lexer = Lexer(text)
+            intepreter = Interpreter(lexer)
+            intepreter.define()
             input_mode = 3
         elif input_mode == 3:
+            intepreter.define_body(text)
             input_mode = 1
 
 if __name__ == "__main__":

@@ -18,22 +18,31 @@ class Lexer():
         self.pos -= 1
         return int(number)
 
+    def msg_error(self, msg):
+        raise Exception(msg)
+
     def parse_function(self):
         name = ''
+        space = False
+
+        start_pos = self.pos
 
         while(self.pos < len(self.text) and self.text[self.pos] != '('):
             if self.text[self.pos].isalpha():
+                if space:
+                    self.msg_error("Function name cannot include space")
                 name += self.text[self.pos]
+            space = self.text[self.pos].isspace()
             self.pos += 1
         
         self.pos += 1
 
         params = []
         pname = ""
-        
+
         self.skip_whitespace()
         
-        while(self.pos < len(self.text) and self.text[self.pos].isalpha()):
+        while(self.pos < len(self.text) and self.text[self.pos].isalnum()):
             pname += self.text[self.pos]
             self.pos += 1
             self.skip_whitespace()
@@ -43,12 +52,17 @@ class Lexer():
                 self.pos += 1
                 self.skip_whitespace()
 
+        if self.text[self.pos - 1] != ')':
+            self.msg_error("Parameter list must end with parameter")
+
         fun = {}
         fun["name"] = name
         fun["params"] = params
         fun["stack"] = 0
 
-        return Token(FUN, fun)
+        fun_call = self.text[start_pos:self.pos]
+
+        return (fun, fun_call)
 
     def get_next_token(self):
         self.skip_whitespace()
@@ -59,7 +73,7 @@ class Lexer():
         current_char = self.text[self.pos]
 
         token = {}
-
+        
         if current_char.isdigit():
             token =  Token(INTEGER, self.parse_number())
         elif current_char == '+':
@@ -75,7 +89,7 @@ class Lexer():
         elif current_char == ')':
             token = Token(RPAREN, ')')
         elif current_char.isalpha():
-            token = self.parse_function()
+            token =  Token(FUN, self.parse_function())
         else:
             self.error("")
 
