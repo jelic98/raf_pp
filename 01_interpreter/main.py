@@ -7,9 +7,9 @@ from lexer import Lexer
 # _def --> a + b + c
 # "fun" -> [
 #   "name" -> "fun"
-#   "params" -> [a, b, c],
+#   "params" -> ["a", "b", "c"],
 #   "expr" -> "a + b + c",
-#   "stack" -> [CALL STACK]
+#   "calls" -> [g, fun]
 # ]
 
 # input_mode = 1 ; normal mode
@@ -63,7 +63,6 @@ class Interpreter():
             self.lexer.pos = self.lexer.text.find(fun_call) + 1
             self.lexer.text = self.lexer.text.replace(fun_call, expr, 1)
 
-            print("TEXT: " + self.lexer.text + " " + self.lexer.text[self.lexer.pos:])
             self.current_token = Token(LPAREN, "(")
 
             return self.factor()
@@ -121,13 +120,35 @@ class Interpreter():
                 self.msg_error("Parameter list must start with parameter")
 
         funs[fun["name"]] = fun
-        last_fun = fun["name"]
+        last_fun = fun
         return token
     
+    def check_recursion(self, search, fun):
+        for call in funs[fun["name"]]["calls"]:
+            if search["name"] == call["name"]:
+                self.msg_error("Infinite recursion detected")
+            self.check_recursion(search, call)
+
     def define_body(self, text):
         global funs, last_fun
         if last_fun is not None:
-            funs[last_fun]["expr"] = text
+            last_fun["expr"] = text
+            pos = 0;
+            while pos < len(text):
+                if text[pos].isalpha():
+                    new_lexer = Lexer(text, pos)
+                    call_tok = new_lexer.get_next_token()
+                    if call_tok.value is not None:
+                        call = call_tok.value[0]
+                        if call_tok.token_type == FUN:
+                            if call["name"] not in funs:
+                                self.msg_error("Function {} not defined".format(call["name"]))
+
+                        last_fun["calls"].append(call)
+                    pos = new_lexer.pos
+                else:
+                    pos += 1
+            self.check_recursion(last_fun, last_fun)
 
 def main():
     global input_mode;

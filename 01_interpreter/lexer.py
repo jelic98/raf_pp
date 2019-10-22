@@ -2,9 +2,9 @@ from token import Token
 from type import *
 
 class Lexer():
-    def __init__(self, text):    
+    def __init__(self, text, pos = 0):    
         self.text = text
-        self.pos = 0
+        self.pos = pos
 
     def skip_whitespace(self):
         while self.pos < len(self.text) and self.text[self.pos].isspace():
@@ -35,6 +35,9 @@ class Lexer():
             space = self.text[self.pos].isspace()
             self.pos += 1
         
+        if((self.pos < len(self.text) and self.text[self.pos] != '(') or self.pos >= len(self.text)):
+            return None
+
         self.pos += 1
 
         params = []
@@ -51,14 +54,15 @@ class Lexer():
                 pname = ""
                 self.pos += 1
                 self.skip_whitespace()
+         
 
         if self.text[self.pos - 1] != ')':
-            self.msg_error("Parameter list must end with parameter")
+            elf.msg_error("Parameter list must end with parameter")
 
         fun = {}
         fun["name"] = name
         fun["params"] = params
-        fun["stack"] = 0
+        fun["calls"] = []
 
         fun_call = self.text[start_pos:self.pos]
 
