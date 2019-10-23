@@ -53,7 +53,7 @@ class Interpreter():
             
             # check if function is defined
             if not fun["name"] in funs:
-                msg_error("Function not defined")
+                self.msg_error("Function not defined")
             
             # get defined function
             fun_defined = funs[fun["name"]]
@@ -142,6 +142,10 @@ class Interpreter():
     # checking infinite recursion
     # by searching function name in bodies of its child functions
     def check_recursion(self, search, fname):
+        # if child is not defined there is no recursion
+        if not fname in funs:
+            return
+
         # for every child function
         for call in funs[fname]["calls"]:
             # if child function has same name as function we are searching for
@@ -181,13 +185,8 @@ class Interpreter():
                         
                         # check if token is actually function
                         if call_tok.token_type == FUN:
-
-                            # check if child function is defined
-                            if call["name"] not in funs:
-                                self.msg_error("Function {} not defined".format(call["name"]))
-
-                        # append child function to children list of last defined function
-                        last_fun["calls"].append(call)
+                            # append child function to children list of last defined function
+                            last_fun["calls"].append(call)
                     pos = new_lexer.pos
                 else:
                     pos += 1

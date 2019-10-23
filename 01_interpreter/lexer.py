@@ -65,16 +65,16 @@ class Lexer():
                 # add parameter to function parameter list 
                 params.append(pname)
             
+                # skip whitespace between parameters and commas
+                if self.text[self.pos]  == ',':
+                    self.skip_whitespace()
+                
                 # reset current parameter name to parse next one
                 pname = ""
                 self.pos += 1
-            
-                # skip whitespace between parameters and commas
-                self.skip_whitespace()
          
-
         if self.text[self.pos - 1] != ')':
-            elf.msg_error("Parameter list must end with parameter")
+            self.msg_error("Parameter list must end with parameter")
 
         # create function (input_mode = 1, 2, 3)
         fun = {}
