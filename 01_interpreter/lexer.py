@@ -48,33 +48,33 @@ class Lexer():
 
         params = []
         pname = ""
-
-        self.skip_whitespace()
         
+        # skip whitespace between parenthesis and first parameter
+        self.skip_whitespace()
+
         # get function parameters
-        while(self.pos < len(self.text) and self.text[self.pos].isalnum()):
+        while(self.pos < len(self.text) and self.text[self.pos].isalnum()): 
             # create temporary string that will hold parameter names
             pname += self.text[self.pos]
             self.pos += 1
             
-            # skip whitespace between commas and parameters
+            # skip whitespace between parameters and commas
             self.skip_whitespace()
-            
+           
             # check if there is more parameters to parse
-            if self.text[self.pos] in [',', ')']:
+            if(self.pos < len(self.text) and self.text[self.pos] in [',', ')']):
                 # add parameter to function parameter list 
                 params.append(pname)
             
-                # skip whitespace between parameters and commas
-                if self.text[self.pos]  == ',':
-                    self.skip_whitespace()
-                
                 # reset current parameter name to parse next one
                 pname = ""
                 self.pos += 1
-         
+
+                # skip whitespace between parameters and commas
+                self.skip_whitespace()
+
         if self.text[self.pos - 1] != ')':
-            self.msg_error("Parameter list must end with parameter")
+            self.msg_error("Function signature not valid")
 
         # create function (input_mode = 1, 2, 3)
         fun = {}
