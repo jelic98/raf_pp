@@ -18,9 +18,6 @@ class Lexer():
         self.pos -= 1
         return int(number)
 
-    def msg_error(self, msg):
-        raise Exception(msg)
-
     # parse funciton (only in input_mode = 2)
     def parse_function(self):
         name = ''
@@ -31,16 +28,13 @@ class Lexer():
         # get function name
         while(self.pos < len(self.text) and self.text[self.pos] != '('):
             if self.text[self.pos].isalpha():
-                # check if function name includes space
-                if space:
-                    self.msg_error("Function name cannot include space")
                 name += self.text[self.pos]
 
-            # check if there is space in function name
+            # skip space in function name
             space = self.text[self.pos].isspace()
             self.pos += 1
         
-        # check if function definition (input_mode = 2) ot its usage (input_mode = 1,3) is correct
+        # check if function definition (input_mode = 2) or its usage (input_mode = 1,3) is correct
         if((self.pos < len(self.text) and self.text[self.pos] != '(') or self.pos >= len(self.text)):
             return None
 
@@ -62,7 +56,7 @@ class Lexer():
             self.skip_whitespace()
            
             # check if there is more parameters to parse
-            if(self.pos < len(self.text) and self.text[self.pos] in [',', ')']):
+            if(self.pos < len(self.text) and self.text[self.pos] == ','):
                 # add parameter to function parameter list 
                 params.append(pname)
             
@@ -72,9 +66,14 @@ class Lexer():
 
                 # skip whitespace between parameters and commas
                 self.skip_whitespace()
+        
+        params.append(pname)
+        
+        if self.text[self.pos] != ')':
+            print("Function signature not valid")
+            return None
 
-        if self.text[self.pos - 1] != ')':
-            self.msg_error("Function signature not valid")
+        self.pos += 1
 
         # create function (input_mode = 1, 2, 3)
         fun = {}

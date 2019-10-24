@@ -27,24 +27,45 @@ class Interpreter():
         self.lexer = lexer
         self.current_token = self.lexer.get_next_token()
 
-    # print custom error message
-    def msg_error(self, msg):
-        raise Exception(msg)
-
     def error(self, token_type):
-        msg_error("Expected {} but found {}".format(token_type, self.current_token.token_type))
+        raise Exception("Expected {} but found {}".format(token_type, self.current_token.token_type))
 
     def eat(self, token_type):
         if self.current_token.token_type == token_type:
             self.current_token = self.lexer.get_next_token()
         else:
             self.error(token_type)
+ 
+    # checking infinite recursion
+    # by searching function name in bodies of its child functions
+    def inf_recur(self, search, fname):
+        # if child is not defined there is no recursion
+        if not fname in funs:
+            return False
+
+        # for every child function
+        for call in funs[fname]["calls"]:
+            # if child function has same name as function we are searching for
+            if search["name"] == call["name"]:
+                # stop execution and print error
+                print("Infinite recursion detected")
+                return True
+            # else check recursively for grand children
+            return self.inf_recur(search, call["name"])
 
     def factor(self):
         token = self.current_token
-        
+
+        if token is None:
+            return None
+       
         # check if current token is function (only in input_mode = 1)
         if token.token_type == FUN:
+            if token.value is None:
+                print("Function not defined correctly")
+                input_mode = 1
+                return None
+            
             # token value is tupple
             # first element is function map
             # second element is concrete usage of defined function
@@ -53,16 +74,22 @@ class Interpreter():
             
             # check if function is defined
             if not fun["name"] in funs:
-                self.msg_error("Function not defined")
+                print("Function not defined")
+                return None
             
             # get defined function
             fun_defined = funs[fun["name"]]
             
             # check parameter 
             if len(fun["params"]) != len(fun_defined["params"]):
-                self.msg_error("Calling function {} with {} instead of {} parameters".format(fun["name"], len(fun["params"]), len(fun_defined["params"])))
+                print("Calling function {} with {} instead of {} parameters".format(fun["name"], len(fun["params"]), len(fun_defined["params"])))
+                return None
             
             pos = 0
+        
+            # check if defined function has infinite recursion
+            if(self.inf_recur(fun, fun["name"])):
+                return None
 
             # put replacement expression in parenthesis to isolate computation
             expr = "(" + fun_defined["expr"] + ")"
@@ -85,7 +112,8 @@ class Interpreter():
         elif token.token_type == LPAREN:
             self.eat(LPAREN)
             result = self.expr()
-            self.eat(RPAREN)
+            if not result is None: 
+                self.eat(RPAREN)
             return result
         elif token.token_type == MINUS:
             self.eat(MINUS)
@@ -96,14 +124,21 @@ class Interpreter():
     def term(self):
         left = self.factor()
         
+        if left is None:
+            return None
+        
         while self.current_token.token_type in [MUL, DIV]:
             if self.current_token.token_type == MUL:
                 self.eat(MUL)
                 right = self.factor()
+                if right is None:
+                    return None
                 left = left * right
             elif self.current_token.token_type == DIV:
                 self.eat(DIV)
                 right = self.factor()
+                if right is None:
+                    return None
                 left = left / right
 
         return left
@@ -111,49 +146,42 @@ class Interpreter():
     def expr(self):
         left = self.term()
 
+        if left is None:
+            return None
+
         while self.current_token.token_type in [PLUS, MINUS]:
             if self.current_token.token_type == PLUS:
                 self.eat(PLUS)
                 right = self.term()
+                if right is None:
+                    return None
                 left = left + right
             elif self.current_token.token_type == MINUS:
                 self.eat(MINUS)
                 right = self.term()
+                if right is None:
+                    return None
                 left = left - right
 
         return left        
 
     # define function signature (only in input_mode = 2)
     def define(self):
-        global funs, last_fun
+        global funs, last_fun, input_mode
         
         token = self.current_token
         fun = token.value[0]
 
         for param in fun["params"]:
-            if not param[0].isalpha():
-                self.msg_error("Parameter list must start with parameter")
+            if(len(param) < 1 or not param[0].isalpha()):
+                print("Parameter list must start with parameter")
+                input_mode = 1
+                return None
 
         funs[fun["name"]] = fun
         last_fun = fun
         
         return token
-    
-    # checking infinite recursion
-    # by searching function name in bodies of its child functions
-    def check_recursion(self, search, fname):
-        # if child is not defined there is no recursion
-        if not fname in funs:
-            return
-
-        # for every child function
-        for call in funs[fname]["calls"]:
-            # if child function has same name as function we are searching for
-            if search["name"] == call["name"]:
-                # stop execution and print error
-                self.msg_error("Infinite recursion detected")
-            # else check recursively for grand children
-            self.check_recursion(search, call["name"])
 
     # define function body (only in input_mode = 3)
     def define_body(self, text):
@@ -190,12 +218,9 @@ class Interpreter():
                     pos = new_lexer.pos
                 else:
                     pos += 1
-            
-            # check if defined function has infinite recursion
-            self.check_recursion(last_fun, last_fun["name"])
 
 def main():
-    global input_mode;
+    global input_mode
 
     while True:
         if input_mode == 2 or input_mode == 3:
@@ -218,12 +243,15 @@ def main():
             lexer = Lexer(text)
             intepreter = Interpreter(lexer)
             result = intepreter.expr()
-            print("<-- {}".format(result))
+
+            if not result is None:
+                print("<-- {}".format(result))
         elif input_mode == 2:
             lexer = Lexer(text)
             intepreter = Interpreter(lexer)
             intepreter.define()
-            input_mode = 3
+            if input_mode == 2:
+                input_mode = 3
         elif input_mode == 3:
             intepreter.define_body(text)
             input_mode = 1
