@@ -5,8 +5,9 @@ TIP_NAREDBE -> 'uslov' | 'ponavljanje'
 NAREDBA_CELINA -> '#celina' CELINA_CELINA '##celina:' TIP_CELINE
 CELINA_CELINA -> ( POSTOJANJE | DODELA | NAREDBA )*
 TIP_CELINE -> 'pitanje' | 'ponovi' | 'da' | 'ne' | 'sadrzaj_rutine' | 'polja'
-POSTOJANJE -> '#postojanje|~' VARIJABLA '|' IZRAZ '##postojanje'
+POSTOJANJE -> '#postojanje|~' TIP_PODATKA '|' VARIJABLA '##postojanje'
 DODELA -> '#dodela|' IZRAZ '|' VARIJABLA '##dodela'
+TIP_PODATKA -> `struna` | `ceo_broj`
 VARIJABLA -> NAZIV | ELEMENT_NIZA
 ELEMENT_NIZA -> NAZIV ':' (NAZIV | IZRAZ)
 RUTINA -> '#rutina|~' RUTINA_CELINA '##rutina:' NAZIV
