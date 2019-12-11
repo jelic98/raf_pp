@@ -1,0 +1,13 @@
+PROGRAM -> '#program' PROGRAM_CELINA '##program'
+PROGRAM_CELINA -> ( POSTOJANJE | DODELA | NAREDBA | RUTINA )*
+NAREDBA -> '#naredba' NAREDBA_CELINA '##naredba:' TIP_NAREDBE
+TIP_NAREDBE -> 'uslov' | 'ponavljanje'
+NAREDBA_CELINA -> '#celina' CELINA_CELINA '##celina:' TIP_CELINE
+CELINA_CELINA -> ( POSTOJANJE | DODELA | NAREDBA )*
+TIP_CELINE -> 'pitanje' | 'ponovi' | 'da' | 'ne' | 'sadrzaj_rutine' | 'polja'
+POSTOJANJE -> '#postojanje|~' VARIJABLA '|' IZRAZ '##postojanje'
+DODELA -> '#dodela|' IZRAZ '|' VARIJABLA '##dodela'
+VARIJABLA -> NAZIV | ELEMENT_NIZA
+ELEMENT_NIZA -> NAZIV ':' (NAZIV | IZRAZ)
+RUTINA -> '#rutina|~' RUTINA_CELINA '##rutina:' NAZIV
+VRATI -> '#vrati|' IZRAZ '##vrati'
