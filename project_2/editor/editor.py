@@ -118,13 +118,11 @@ class Editor(object):
 
     def eventload(self, filename):
         self.filename = filename
+        self.updatetitlebar()
+        self.text.delete("1.0", tkinter.END)
 
         if not os.access(self.filename, os.R_OK):
             os.system("touch " + self.filename)
-
-        self.updatetitlebar()
-        
-        self.text.delete("1.0", tkinter.END)
 
         with open(self.filename, "r") as f:
             text = f.read()
@@ -134,18 +132,18 @@ class Editor(object):
                 self.text.tag_remove(tkinter.SEL, '1.0', tkinter.END)
                 self.text.see(tkinter.INSERT)
 
-    def eventkey(self, event):
-        keycode = event.keycode
-        char = event.char
-        self.recolorize()
-        self.updatetitlebar()
- 
     def eventsave(self, event):
         with open(self.filename, "w") as filedescriptor:
             filedescriptor.write(self.text.get("1.0", tkinter.END)[:-1])
         
         self.text.edit_modified(False)
         self.root.title("{} [saved]".format(self.filename))
+
+    def eventkey(self, event):
+        keycode = event.keycode
+        char = event.char
+        self.recolorize()
+        self.updatetitlebar()
  
     def mainloop(self):
         for task in self.bootstrap:
@@ -207,12 +205,10 @@ class Editor(object):
             start_index = end_index
  
 if __name__ == "__main__":
-    ext = ""
-
     try:
         ext = sys.argv[1].split('.')[1]
     except IndexError:
-        pass
+        ext = ""
     
     if ext == "raf":
         editor = Editor(lexer = RafLangLexer())
