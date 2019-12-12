@@ -123,6 +123,8 @@ class Editor(object):
             os.system("touch " + self.filename)
 
         self.updatetitlebar()
+        
+        self.text.delete("1.0", tkinter.END)
 
         with open(self.filename, "r") as f:
             text = f.read()
