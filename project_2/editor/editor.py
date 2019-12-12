@@ -1,38 +1,17 @@
 #!/usr/bin/python
-# Copyright 2015 James Stallings
- 
+# Created by James Stallings (https://github.com/JamesStallings)
+# Modified by Lazar Jelic (https://github.com/jelic98)
+
 import os
 import io
 import sys
- 
-try:
-    # Python 3
-    import tkinter
-    from tkinter import font, ttk, scrolledtext, _tkinter
-
-except ImportError:
-    # Python 2
-    import Tkinter as tkinter
-    from Tkinter import ttk
-    import tkFont as font
-    import ScrolledText as scrolledtext
- 
+import tkinter
+from tkinter import font, ttk, scrolledtext, _tkinter
 from pygments.lexers.python import PythonLexer
-from pygments.lexers.special import TextLexer
-from pygments.lexers.html import HtmlLexer
-from pygments.lexers.html import XmlLexer
-from pygments.lexers.templates import HtmlPhpLexer
-from pygments.lexers.perl import Perl6Lexer
-from pygments.lexers.ruby import RubyLexer
-from pygments.lexers.configs import IniLexer
-from pygments.lexers.configs import ApacheConfLexer
-from pygments.lexers.shell import BashLexer
-from pygments.lexers.diff import DiffLexer
-from pygments.lexers.dotnet import CSharpLexer
-from pygments.lexers.sql import MySqlLexer
 from pygments.styles import get_style_by_name
+from raflang import RafLangLexer
  
-class CoreUI(object):
+class Editor(object):
     def __init__(self, lexer):
         self.sourcestamp = {}
         self.filestamp = {}
@@ -226,16 +205,16 @@ class CoreUI(object):
             start_index = end_index
  
 if __name__ == "__main__":
-    extens = ""
+    ext = ""
 
     try:
-        extens = sys.argv[1].split('.')[1]
+        ext = sys.argv[1].split('.')[1]
     except IndexError:
         pass
     
-    if extens == "raf":
-        ui_core = CoreUI(lexer = RafLexer())
+    if ext == "raf":
+        editor = Editor(lexer = RafLangLexer())
     else:
-        ui_core = CoreUI(lexer = PythonLexer())
+        editor = Editor(lexer = PythonLexer())
     
-    ui_core.mainloop()
+    editor.mainloop()
