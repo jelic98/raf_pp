@@ -1,4 +1,4 @@
-from app.TType import *
+from app.type import *
 from app.nodes import *
 from functools import wraps
 import pickle
@@ -35,10 +35,8 @@ class Parser():
 		else:
 			self.error(token_type)
 
-
 	def program(self):
 		child_nodes = []
-
 		while self.current_token.token_type != EOF:
 			if self.current_token.token_type == HASH:
 				child_nodes.append(self.include_library())
@@ -49,28 +47,22 @@ class Parser():
 					child_nodes.extend(self.var_declaration_list())
 			else:
 				self.error('HASH or TYPE')
-
 		return Program(child_nodes)
 
 	def function_declaration(self):
 		f_type = Type_node(self.current_token.value)
 		self.eat(TYPE)
-
 		f_name = self.current_token.value
 		self.eat(ID)
-
 		self.eat(LPAREN)
-		# pasre parameters
 		self.eat(RPAREN)
 		f_body = self.body()
-
 		return Fun_Decl(f_type, f_name, None, f_body)
 
 	def body(self, brackets = True):
 		if brackets:
 			self.eat(LBRACKET)
 		stmts = []
-
 		if brackets:
 			while self.current_token.token_type != RBRACKET:
 				stmt = self.statement()
@@ -84,7 +76,6 @@ class Parser():
 				stmts.extend(stmt)
 			else:
 				stmts.append(stmt)
-
 		if brackets:
 			self.eat(RBRACKET)
 		return Body(stmts)
@@ -94,7 +85,6 @@ class Parser():
 			return self.if_stmt()
 		elif self.current_token.token_type == TYPE:
 			return self.var_declaration_list()
-
 		else:
 			self.error('some statement')
 
@@ -103,53 +93,41 @@ class Parser():
 		self.eat(LPAREN)
 		condition = self.logic()
 		self.eat(RPAREN)
-
 		body = None
 		else_body = None
-
 		if self.current_token.token_type == LBRACKET:
 			body = self.body()
 		else:
 			body = self.body(False)
-
 		if self.current_token.token_type == ELSE:
 			self.eat(ELSE)
 			if self.current_token.token_type == LBRACKET:
 				else_body = self.body()
 			else:
 				else_body = self.body(False)
-
 		return If_Stmt(condition, body, else_body)
 
 	def var_declaration_list(self):
 		declarations = []
-
 		type_node = Type_node(self.current_token.value)
 		self.eat(TYPE)
 		var_node = Variable(self.current_token.value)
 		self.eat(ID)
-
 		declarations.extend(self.var_declaration(type_node, var_node))
-
 		while self.current_token.token_type == COMMA:
 			self.eat(COMMA)
 			var_node = Variable(self.current_token.value)
 			self.eat(ID)
 			declarations.extend(self.var_declaration(type_node, var_node))
-
 		self.eat(SEMICOLON)
-
 		return declarations
 
 	def var_declaration(self, type_node, var_node):
 		declarations = []
-
 		declarations.append(Var_Decl(type_node, var_node))
-
 		if self.current_token.token_type == ASSIGN:
 			self.eat(ASSIGN)
 			declarations.append(Assign(var_node, self.logic()))
-
 		return declarations
 
 	def include_library(self):
@@ -160,18 +138,15 @@ class Parser():
 		if token.token_type == INTEGER:
 			self.eat(INTEGER)
 			return Num(token.value)
-
 		elif token.token_type == BOOLEAN:
 			self.eat(BOOLEAN)
 			return Num(token.value)
-
 		elif token.token_type in [NOT, MINUS]:
 			op_token = self.current_token
 			if op_token.token_type == MINUS:
 				self.eat(MINUS)
 			elif op_token.token_type == NOT:
 				self.eat(NOT)
-
 			result = None
 			if self.current_token.token_type == LPAREN:
 				self.eat(LPAREN)
@@ -179,11 +154,9 @@ class Parser():
 				self.eat(RPAREN)
 			else:
 				result = self.factor()
-
 			if op_token.token_type == NOT:
 				self.check_logic(result)
 			return UnOp(op_token.value, result)
-
 		elif token.token_type == LPAREN:
 			self.eat(LPAREN)
 			result = self.logic()
@@ -192,7 +165,6 @@ class Parser():
 
 	def term(self):
 		left_node = self.factor()
-
 		while self.current_token.token_type in [MUL, DIV]:
 			if self.current_token.token_type == MUL:
 				self.eat(MUL)
@@ -202,13 +174,10 @@ class Parser():
 				self.eat(DIV)
 				right_node = self.factor()
 				left_node = BinOp(left_node, '/', right_node)
-
 		return left_node
 
 	def expr(self):
-
 		left_node = self.term()
-
 		while self.current_token.token_type in [PLUS, MINUS]:
 			if self.current_token.token_type == PLUS:
 				self.eat(PLUS)
@@ -218,12 +187,10 @@ class Parser():
 				self.eat(MINUS)
 				right_node = self.term()
 				left_node = BinOp(left_node, '-', right_node)
-
 		return left_node
 
 	def compare(self):
 		left_node = self.expr()
-
 		if self.current_token.token_type == GREATER:
 			self.eat(GREATER)
 			right_node = self.expr()
@@ -240,7 +207,6 @@ class Parser():
 			self.eat(NOT_EQUALS)
 			right_node = self.expr()
 			left_node = BinOp(left_node, '!=', right_node)
-
 		return left_node
 
 	def check_logic(self, node):
@@ -258,7 +224,6 @@ class Parser():
 
 	def logic(self):
 		left_node = self.compare()
-
 		if self.current_token.token_type == AND:
 			self.eat(AND)
 			self.check_logic(left_node)
@@ -271,5 +236,4 @@ class Parser():
 			right_node = self.compare()
 			self.check_logic(right_node)
 			left_node = BinOp(left_node, 'or', right_node)
-
 		return left_node

@@ -10,7 +10,6 @@ class NodeVisitor(object):
 	def error_method(self, node):
 		raise Exception("Nije nadjena metoda {}".format('visit_' + type(node).__name__))
 
-
 class Interpreter(NodeVisitor):
 	def __init__(self, parser):
 		self.parser = parser
@@ -21,7 +20,6 @@ class Interpreter(NodeVisitor):
 		self.dot.node_attr['height'] = '.1'
 		self.dot.node_attr['ranksep'] = '.3'
 		self.dot.edge_attr['arrowsize']='.5'
-
 
 	def visit_Program(self, node):
 		self.dot.node('node{}'.format(self.ncount), 'Program')
@@ -41,8 +39,6 @@ class Interpreter(NodeVisitor):
 
 		self.visit(node.f_type)
 		self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.f_type._num))
-
-		# visit parameters
 
 		self.visit(node.f_body)
 		self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.f_body._num))
@@ -109,14 +105,12 @@ class Interpreter(NodeVisitor):
 		self.dot.node('node{}'.format(self.ncount), '{}'.format(node.op))
 		node._num = self.ncount
 		self.ncount += 1
-
-		self.visit(node.left)
+		
+                self.visit(node.left)
 		self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.left._num))
 
 		self.visit(node.right)
 		self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.right._num))
-
-
 
 	def visit_UnOp(self, node):
 		self.dot.node('node{}'.format(self.ncount), '{}'.format(node.op))

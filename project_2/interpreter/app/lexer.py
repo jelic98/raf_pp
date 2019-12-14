@@ -1,7 +1,5 @@
-from app.TType import *
-
-from app.Token import Token
-
+from app.type import *
+from app.token import Token
 
 class Lexer():
 	def __init__(self, text):	
@@ -22,10 +20,10 @@ class Lexer():
 
 	def parse_string(self):
 		string = ''
-		while(self.pos <len(self.text) and (self.text[self.pos].isalpha() or self.text[self.pos].isdigit())):
+                while(self.pos <len(self.text) and (self.text[self.pos].isalpha() or self.text[self.pos].isdigit())):
 			string += self.text[self.pos]
 			self.pos += 1
-		self.pos -= 1
+                self.pos -= 1
 
 		if string == 'true':
 			return Token(BOOLEAN, True)
@@ -44,17 +42,16 @@ class Lexer():
 
 	def advance(self):
 		self.pos += 1
-		if self.pos == len(self.text):
+		
+                if self.pos == len(self.text):
 			self.error("");
-		self.current_char = self.text[self.pos];
+		
+                self.current_char = self.text[self.pos];
 
 	def get_next_token(self):
-
 		self.skip_whitespace()
-
 		if self.pos >= len(self.text):
 			return Token(EOF, None)
-
 		current_char = self.text[self.pos]
 
 		token = {}
