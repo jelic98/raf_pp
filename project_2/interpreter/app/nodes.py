@@ -72,8 +72,8 @@ class CelinaPolje(AST):
                 self.polje = polje
 
 class CelinaSadrzajRutine(AST):
-        def __init__(self, celina):
-                self.celina = celina
+        def __init__(self, sadrzaj):
+                self.sadrzaj = sadrzaj
 
 class CelinaCelina(AST):
         def __init__(self, cvorovi):

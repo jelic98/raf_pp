@@ -8,7 +8,7 @@ class NodeVisitor(object):
                 return visitor(node)
 
         def error_method(self, node):
-                raise Exception("Nije nadjena metoda {}".format('visit_' + type(node).__name__))
+                raise Exception("Method missing: {}".format('visit_' + type(node).__name__))
 
 class Interpreter(NodeVisitor):
         def __init__(self, parser):
@@ -22,76 +22,157 @@ class Interpreter(NodeVisitor):
                 self.dot.edge_attr['arrowsize']='.5'
 
         def visit_Program(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'Program')
+                self.dot.node('node{}'.format(self.ncount), 'PROGRAM')
                 node._num = self.ncount
                 self.ncount += 1
 
-                child_nodes = node.child_nodes
-
-                for child in child_nodes:
+                for cvor in node.cvorovi:
                         self.visit(child)
-                        self.dot.edge('node{}'.format(node._num), 'node{}'.format(child._num))
-
-        def visit_Fun_Decl(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'Fun_Decl: {}'.format(node.f_name))
+                        self.dot.edge('node{}'.format(node._num), 'node{}'.format(cvor._num))
+        
+        def visit_Postojanje(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'POSTOJANJE')
                 node._num = self.ncount
                 self.ncount += 1
 
-                self.visit(node.f_type)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.f_type._num))
+                self.visit(node.tip)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.tip._num))
 
-                self.visit(node.f_body)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.f_body._num))
+                self.visit(node.naziv)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
 
-        def visit_Type_node(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'Type: {}'.format(node.type))
+        def visit_Dodela(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'DODELA')
                 node._num = self.ncount
                 self.ncount += 1
 
-        def visit_Variable(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'Variable: {}'.format(node.variable))
+                self.visit(node.izraz)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.izraz._num))
+
+                self.visit(node.naziv)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
+
+        def visit_Polje(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'POLJE')
                 node._num = self.ncount
                 self.ncount += 1
 
-        def visit_Var_Decl(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'Var_Decl')
+                self.visit(node.tip)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.tip._num))
+
+                self.visit(node.naziv)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
+
+        def visit_Rutina(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'RUTINA')
                 node._num = self.ncount
                 self.ncount += 1
 
-                self.visit(node.type_node)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.type_node._num))
+                self.visit(node.tip)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.tip._num))
 
-                self.visit(node.var_node)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.var_node._num))
+                self.visit(node.sadrzaj)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.sadrzaj._num))
 
-        def visit_Assign(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'Assign')
+                self.visit(node.naziv)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
+
+        def visit_RutinaPoziv(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'RUTINA_POZIV')
                 node._num = self.ncount
                 self.ncount += 1
 
-                self.visit(node.var_node)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.var_node._num))
-
-                self.visit(node.value)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.value._num))
-
-        def visit_If_Stmt(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'IF')
+                for arg in node.arguenti:
+                        self.visit(arg)
+                        self.dot.edge('node{}'.format(node._num), 'node{}'.format(arg._num))
+        
                 node._num = self.ncount
                 self.ncount += 1
 
-                self.visit(node.condition)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.condition._num))
+                self.visit(node.naziv)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
 
-                self.visit(node.body)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.body._num))
+        def visit_UgradjenaRutinaPoziv(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'UGRADJENA_RUTINA_POZIV')
+                node._num = self.ncount
+                self.ncount += 1
 
-                if  node.else_body != None:
-                        self.visit(node.else_body)
-                        self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.else_body._num))
+                for arg in node.arguenti:
+                        self.visit(arg)
+                        self.dot.edge('node{}'.format(node._num), 'node{}'.format(arg._num))
+        
+                node._num = self.ncount
+                self.ncount += 1
 
-        def visit_Body(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'Body')
+                self.visit(node.naziv)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
+
+        def visit_Vrati(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'VRATI')
+                node._num = self.ncount
+                self.ncount += 1
+
+                self.visit(node.izraz)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.izraz._num))
+
+        def visit_NaredbaUslov(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'USLOV')
+                node._num = self.ncount
+                self.ncount += 1
+
+                self.visit(node.pitanje)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.pitanje._num))
+
+                self.visit(node.da)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.da._num))
+
+                if node.ne != None:
+                        self.visit(node.ne)
+                        self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.ne._num))
+
+        def visit_NaredbaPonavljanje(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'PONAVLJANJE')
+                node._num = self.ncount
+                self.ncount += 1
+
+                self.visit(node.pitanje)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.pitanje._num))
+
+                self.visit(node.ponovi)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.ponovi._num))
+
+        def visit_Pitanje(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.izraz))
+                node._num = self.ncount
+                self.ncount += 1
+
+        def visit_Da(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.celina))
+                node._num = self.ncount
+                self.ncount += 1
+
+        def visit_Ne(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.celina))
+                node._num = self.ncount
+                self.ncount += 1
+
+        def visit_Ponovi(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.celina))
+                node._num = self.ncount
+                self.ncount += 1
+
+        def visit_Polje(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.polje))
+                node._num = self.ncount
+                self.ncount += 1
+
+        def visit_SadrzajCeline(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.sadrzaj))
+                node._num = self.ncount
+                self.ncount += 1
+
+        def visit_CelinaCelina(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'CELINA')
                 node._num = self.ncount
                 self.ncount += 1
 
@@ -101,29 +182,34 @@ class Interpreter(NodeVisitor):
                         self.visit(stmt)
                         self.dot.edge('node{}'.format(node._num), 'node{}'.format(stmt._num))
 
-        def visit_BinOp(self, node):
-                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.op))
+        def visit_CeoBroj(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.broj))
+                node._num = self.ncount
+                self.ncount += 1
+
+        def visit_Struna(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.struna))
+                node._num = self.ncount
+                self.ncount += 1
+
+        def visit_BinarnaOperacija(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.simbol))
                 node._num = self.ncount
                 self.ncount += 1
                 
-                self.visit(node.left)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.left._num))
+                self.visit(node.prvi)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.prvi._num))
 
-                self.visit(node.right)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.right._num))
+                self.visit(node.drugi)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.drugi._num))
 
-        def visit_UnOp(self, node):
-                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.op))
+        def visit_UnarnaOperacija(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.simbol))
                 node._num = self.ncount
                 self.ncount += 1
 
-                self.visit(node.node)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.node._num))
-
-        def visit_Num(self, node):
-                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.num))
-                node._num = self.ncount
-                self.ncount += 1
+                self.visit(node.prvi)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.prvi._num))
 
         def parse(self):
                 tree = self.parser.program()

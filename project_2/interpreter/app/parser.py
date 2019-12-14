@@ -34,7 +34,7 @@ class Parser():
                 self.eat(NAREDBA_POCETAK)
                 self.eat(NAREDBA_KRAJ)
                 self.eat(NAREDBA_USLOV)
-                return self.current_token.token_type == LPAREN
+                return self.current_token.token_type == ZAGRADA_OTVORENA
 
         def program(self):
                 child_nodes = []
@@ -56,8 +56,8 @@ class Parser():
                 self.eat(TIP_PODATKA)
                 f_name = self.current_token.value
                 self.eat(NAZIV)
-                self.eat(LPAREN)
-                self.eat(RPAREN)
+                self.eat(ZAGRADA_OTVORENA)
+                self.eat(ZAGRADA_ZATVORENA)
                 f_body = self.body()
                 return Fun_Decl(f_type, f_name, None, f_body)
 
@@ -71,9 +71,9 @@ class Parser():
 
         def naredba_uslov(self):
                 self.eat(IF)
-                self.eat(LPAREN)
+                self.eat(ZAGRADA_OTVORENA)
                 condition = self.logic()
-                self.eat(RPAREN)
+                self.eat(ZAGRADA_ZATVORENA)
                 body = None
                 else_body = None
                 if self.current_token.token_type == LBRACKET:
@@ -103,9 +103,9 @@ class Parser():
                 self.eat(SEMICOLON)
                 return declarations
 
-        def var_declaration(self, type_node, var_node):
-                declarations = []
-                declarations.append(Var_Decl(type_node, var_node))
+        def dodela(self, izraz, tip):
+                dodele = []
+                dodele.append(Dodela(izraz, naziv))
                 if self.current_token.token_type == JEDNAKO:
                         self.eat(JEDNAKO)
                         declarations.append(Assign(var_node, self.logic()))
@@ -113,32 +113,29 @@ class Parser():
 
         def factor(self):
                 token = self.current_token
-                if token.token_type == INTEGER:
-                        self.eat(INTEGER)
-                        return Num(token.value)
-                elif token.token_type == BOOLEAN:
-                        self.eat(BOOLEAN)
-                        return Num(token.value)
-                elif token.token_type in [LOGICKO_NE, MINUS]:
+                if token.token_type == CEO_BROJ:
+                        self.eat(CEO_BROJ)
+                        return CeoBroj(token.value)
+                elif token.token_type in [MINUS, LOGICKO_NE]:
                         op_token = self.current_token
                         if op_token.token_type == MINUS:
                                 self.eat(MINUS)
                         elif op_token.token_type == LOGICKO_NE:
                                 self.eat(LOGICKO_NE)
                         result = None
-                        if self.current_token.token_type == LPAREN:
-                                self.eat(LPAREN)
+                        if self.current_token.token_type == ZAGRADA_OTVORENA:
+                                self.eat(ZAGRADA_OTVORENA)
                                 result = self.logic()
-                                self.eat(RPAREN)
+                                self.eat(ZAGRADA_ZATVORENA)
                         else:
                                 result = self.factor()
                         if op_token.token_type == LOGICKO_NE:
                                 self.check_logic(result)
                         return UnarnaOperacija(op_token.value, result)
-                elif token.token_type == LPAREN:
-                        self.eat(LPAREN)
+                elif token.token_type == ZAGRADA_OTVORENA:
+                        self.eat(ZAGRADA_OTVORENA)
                         result = self.logic()
-                        self.eat(RPAREN)
+                        self.eat(ZAGRADA_ZATVORENA)
                         return result
 
         def term(self):
@@ -152,6 +149,10 @@ class Parser():
                                 self.eat(DELJENJE)
                                 right_node = self.factor()
                                 left_node = BinarnaOperacija(left_node, '/', right_node)
+                        elif self.current_token.token_type == OSTATAK:
+                                self.eat(OSTATAK)
+                                right_node = self.factor()
+                                left_node = BinarnaOperacija(left_node, '%', right_node)
                 return left_node
 
         def expr(self):
@@ -169,20 +170,28 @@ class Parser():
 
         def compare(self):
                 left_node = self.expr()
-                if self.current_token.token_type == GREATER:
-                        self.eat(GREATER)
+                if self.current_token.token_type == VECE:
+                        self.eat(VECE)
                         right_node = self.expr()
                         left_node = BinarnaOperacija(left_node, '>', right_node)
-                elif self.current_token.token_type == LESS:
-                        self.eat(LESS)
+                elif self.current_token.token_type == MANJE:
+                        self.eat(MANJE)
                         right_node = self.expr()
                         left_node = BinarnaOperacija(left_node, '<', right_node)
-                elif self.current_token.token_type == EQUALS:
-                        self.eat(EQUALS)
+                elif self.current_token.token_type == VECE_JEDNAKO:
+                        self.eat(VECE_JEDNAKO)
                         right_node = self.expr()
-                        left_node = BinarnaOperacija(left_node, '==', right_node)
-                elif self.current_token.token_type == LOGICKO_NE_EQUALS:
-                        self.eat(LOGICKO_NE_EQUALS)
+                        left_node = BinarnaOperacija(left_node, '>=', right_node)
+                elif self.current_token.token_type == MANJE_JEDNAKO:
+                        self.eat(MANJE_JEDNAKO)
+                        right_node = self.expr()
+                        left_node = BinarnaOperacija(left_node, '<=', right_node)
+                elif self.current_token.token_type == JEDNAKO:
+                        self.eat(JEDNAKO)
+                        right_node = self.expr()
+                        left_node = BinarnaOperacija(left_node, '=', right_node)
+                elif self.current_token.token_type == NIJE_JEDNAKO:
+                        self.eat(NIJE_JEDNAKO)
                         right_node = self.expr()
                         left_node = BinarnaOperacija(left_node, '!=', right_node)
                 return left_node
