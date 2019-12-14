@@ -1,5 +1,8 @@
 #program
-#postojanje | ~struna | ime ##postojanje
-#dodela| #~ugradjena_rutina | ##~ugradjena_rutina:ucitaj | ime ##dodela #~ugradjena_rutina |
-#~ugradjena_rutina | "Zdravo, ", ime ##~ugradjena_rutina:spoji_strune ##~ugradjena_rutina:ispisi
+	#postojanje | ~struna | ime ##postojanje
+	#dodela| #~ugradjena_rutina | ##~ugradjena_rutina:ucitaj | ime ##dodela
+	#~ugradjena_rutina | 
+		#~ugradjena_rutina | "Zdravo, ", ime ##~ugradjena_rutina:spoji_strune
+	##~ugradjena_rutina:ispisi
 ##program
+

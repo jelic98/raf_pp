@@ -1,0 +1,93 @@
+#program
+	#rutina | ~ceo_broj
+		#celina
+		
+			#postojanje | ~ceo_broj | i ##postojanje
+			#dodela | 1 | i ##dodela
+			
+			#postojanje | ~ceo_broj | rezultat ##postojanje
+			#dodela | 0 | rezultat ##dodela
+			
+			#naredba
+				#celina
+					#dodela | rezultat + i | rezultat ##dodela
+					#dodela | i+1 | i ##dodela
+				##celina:ponovi
+				#celina
+					i != n
+				##celina:pitanje
+			#naredba:ponavljanje
+			
+			#vrati | rezultat ##vrati
+			
+		##celina:sadrzaj_rutine
+		#celina
+			#polje | ~ceo_broj | n ##polje
+		##celina:polja
+	##rutina:izracunaj_zbir
+	
+	#rutina | ~ceo_broj
+		
+		#celina
+			
+			#postojanje | ~ceo_broj | i ##postojanje
+			#dodela | 1 | i ##dodela
+			
+			#postojanje | ~ceo_broj | rezultat ##postojanje
+			#dodela | 1 | rezultat ##dodela
+			
+			#naredba
+				#celina
+					
+					#dodela | rezultat * i | rezultat ##dodela
+					#dodela | i+1 | i ##dodela
+					
+				##celina:ponovi
+				#celina
+					i != n
+				##celina:pitanje
+			##naredba:ponavljanje
+			
+			#vrati | rezultat ##vrati
+			
+		##celina:sadrzaj_rutine
+		#celina
+			#polje | ~ceo_broj | n ##polje
+		#celina:polja
+	##rutina:izracunaj_proizvod
+	
+	#postojanje | ~ceo_broj | n ##postojanje
+	#dodela| #~ugradjena_rutina | ##~ugradjena_rutina:ucitaj | n ##dodela
+	
+	#postojanje | ~struna | opcija ##postojanje
+	#dodela| #~ugradjena_rutina | ##~ugradjena_rutina:ucitaj | opcija ##dodela
+	
+	#naredba
+		#celina
+			
+			#naredba
+				#celina
+					#~ugradjena_rutina |
+						#~rutina | n ##~rutina:izracunaj_zbir
+					##~ugradjena_rutina:ispisi
+				##celina:da
+				#celina
+					#~ugradjena_rutina |
+						#~rutina | n ##~rutina:izracunaj_proizvod
+					##~ugradjena_rutina:ispisi
+				##celina:ne
+				#celina
+					opcija = "zbir"
+				##celina:pitanje
+			##naredba:uslov
+			
+		##celina:da
+		#celina
+			#~ugradjena_rutina | "Uneta opcija nije validna" ##~ugradjena_rutina:ispisi
+		##celina:ne
+		#celina
+			opcija = "zbir" || opcija = "proizvod"
+		##celina:pitanje
+	##naredba:uslov
+##program
+

@@ -1,0 +1,49 @@
+#program
+	
+	#postojanje | ~ceo_broj | tajni_broj ##postojanje
+	#dodela | 3 | tajni_broj ##dodela
+	
+	#postojanje | ~struna | pokusaji ##postojanje
+	
+	#postojanje | ~ceo_broj | i ##postojanje
+	#dodela | 0 | i ##dodela
+	
+	#naredba
+		#celina
+			#dodela | 0 | pokusaji:i ##dodela
+			#dodela | i+1 | i ##dodela 
+		##celina:ponovi
+		#celina
+			i < 10
+		##celina:pitanje
+	##naredba:ponavljanje
+	
+	#postojanje | ~ceo_broj | n ##postojanje
+	#dodela | -1 | n ##dodela
+	#postojanje | ~ceo_broj | broj_pokusaja ##postojanje
+	#dodela | 0 | broj_pokusaja ##dodela
+	
+	#naredba
+		#celina
+			#dodela | #~ugradjena_rutina | ##~ugradjena_rutina:ucitaj | n ##dodela
+			#naredba
+				#celina
+					#dodela | 1 | pokusaji:n ##dodela
+					#dodela | broj_pokusaja + 1 | broj_pokusaja ##dodela 
+				##celina:da
+				#celina 
+					pokusaji:n = 0
+				##celina:pitanje
+			##naredba:uslov
+		##celina:ponovi
+		#celina
+			n != tajni_broj
+		##celina:pitanje
+	##naredba:ponavljanje
+	
+	#~ugradjena_rutina | 
+		#~ugradjena_rutina | "Broj pokusaja je bio: ", broj_pokusaja ##~ugradjena_rutina:spoji_strune
+	##~ugradjena_rutina:ispisi
+	
+##program
+

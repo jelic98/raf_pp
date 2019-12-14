@@ -1,0 +1,169 @@
+#program
+
+	#rutina | ~ceo_broj
+		#celina
+			#postojanje | ~ceo_broj | max_duzina ##postojanje
+			#dodela | -1 | max_duzina ##dodela
+			
+			#postojanje | ~ceo_broj | i ##postojanje
+			#dodela | 0 | i ##dodela
+			
+			#naredba
+				#celina
+					
+					#naredba
+						#celina
+							#dodela | (#~ugradjena_rutina | reci:i
+ ##~ugradjena_rutina:duzina_strune) |
+ Max_duzina
+##dodela
+						##celina:da
+						#celina
+							(#~ugradjena_rutina | reci:i 
+##~ugradjena_rutina:duzina_strune) > max_duzina
+						##celina:pitanje
+					##naredba:uslov
+					
+					#dodela | i+1 | i ##dodela
+				##celina:ponovi
+				#celina
+					i < broj_reci
+				##celina:pitanje				
+			##naredba:ponavljanje
+			
+			#vrati max_duzina ##vrati
+			
+		##celina:sadrzaj_rutine
+		#celina
+			#polje | ~struna | reci ##polje
+			#polje | ~ceo_broj | broj_reci ##polje
+		#celina:polja
+	##rutina:duzina_najduze_reci
+	
+	#rutina | ~struna
+		#celina
+			#postojanje | ~struna | zvezdice ##postojanje
+			#postojanje | ~ceo_broj | i ##postojanje
+			#dodela | 0 | i ##dodela
+			#naredba
+				#celina
+					#dodela | "*" | zvezdice:i ##dodela
+					#dodela | i+1 | i ##dodela
+				##celina:ponovi
+				#celina
+					i < max_duzina + 4
+				##celina:pitanje
+			##naredba:ponavljanje
+			
+			#vrati zvezdice ##vrati
+			
+		##celina:sadrzaj_rutine
+		#celina
+			#polje | ~ceo_broj | max_duzina ##polje
+		##celina:polja
+	##rutina:red_zvezdica
+	
+	#rutina | 
+		#celina
+			#postojanje | ~ceo_broj | i ##postojanje
+			#dodela | 0 | i ##dodela
+			#postojanje | ~ceo_broj | j ##postojanje
+			#dodela | 0 | j ##dodela
+			
+			#naredba
+				#celina
+					#dodela | 0 | j ##dodela
+					#naredba
+						#celina
+							#~ugradjena_rutina | resenje:i:j ##~ugradjena_rutina:ispisi
+							#dodela | j+1 | j ##dodela
+						##celina:ponovi
+						#celina
+							j < broj_kolona
+						##celina:pitanje
+					##naredba:ponavljanje
+					#~ugradjena_rutina | "\n" ##~ugradjena_rutina:ispisi
+					#dodela | i+1 | i ##dodela
+				##celina:ponovi
+				#celina
+					i < broj_redova
+				##celina:pitanje
+			##naredba:ponavljanje
+		
+		##celina:sadrzaj_rutine
+		#celina
+			#polje | ~ceo_broj | broj_redova ##polje
+			#polje | ~ceo_broj | broj_kolona ##polje
+			#polje | ~struna | resenje ##polje
+		##celina:polja
+	##rutina:ispisi_resenje
+
+	#postojanje | ~struna | recenica ##postojanje
+	#dodela | #~ugradjena_rutina | ##~ugradjena_rutina:ucitaj | recenica ##dodela
+
+	#postojanje | ~struna | reci ##postojanje
+	#dodela | #~ugradjena_rutina | recenica, " " ##~ugradjena_rutina:podeli_strunu | reci ##dodela
+	
+	
+	
+	#postojanje | ~ceo_broj | broj_reci ##postojanje
+	#dodela | #~ugradjena_rutina | reci ##~ugradjena_rutina:duzina_strune | broj_reci ##dodela
+	
+	#postojanje | ~ceo_broj | max_duzina ##postojanje
+	#dodela | #~rutina | reci, broj_reci ##~rutina:duzina_najduze_reci | max_duzina ##dodela
+	
+	
+	
+	#postojanje | ~struna | resenje ##postojanje
+	
+	#dodela | #~rutina | max_duzina ##~rutina:red_zvezdica | resenje:0 ##dodela
+	
+	#postojanje | ~ceo_broj | i ##postojanje
+	#dodela | 0 | i ##dodela
+	
+	#naredba
+		#celina
+			
+			#dodela | "*" | resenje:(i+1):0 ##dodela
+			#dodela | " " | resenje:(i+1):1 ##dodela
+			
+			#postojanje | ~ceo_broj | j ##postojanje
+			#dodela | 0 | j ##dodela
+			
+			#naredba
+				#celina
+					#dodela | reci:i:j | resenje:(i+1):(j+2) ##dodela
+					#dodela | j+1 | j ##dodela 
+				##celina:ponovi
+				#celina
+					j < (#~ugradjena_rutina | reci:i ##~ugradjena_rutina:duzina_strune)
+				##celina:pitanje
+			##naredba:ponavljanje
+			
+			#naredba
+				#celina
+					#dodela | " " | resenje:(i+1):(j+2) ##dodela
+					#dodela | j+1 | j ##dodela 
+				##celina:ponovi
+				#celina
+					j < max_duzina
+				##celina:pitanje
+			##naredba:ponavljanje
+			
+			#dodela | " " | resenje:(i+1):(j+2) ##dodela
+			#dodela | "*" | resenje:(i+1):(j+3) ##dodela
+			
+			
+			#dodela i+1 | i ##dodela
+		##celina:ponovi
+		#celina
+			i < broj_reci
+		#celina:pitanje
+	##naredba:ponavljanje
+	
+	#dodela | #~rutina | max_duzina ##~rutina:red_zvezdica | resenje:(broj_reci + 1) ##dodela
+	
+	#~rutina | broj_reci + 2, max_duzina + 4, resenje ##~rutina:ispisi_resenje
+	
+##program
+

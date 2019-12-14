@@ -1,0 +1,103 @@
+#program
+	
+	#rutina | ~struna
+		#celina
+			#postojanje | ~ceo_broj | i ##postojanje
+			#dodela | 0 | i ##dodela
+			
+			#postojanje | ~ceo_broj | j ##postojanje
+			#dodela | 0 | j ##dodela
+			
+			#postojanje | ~ceo_broj | tmp ##postojanje
+			#postojanje | ~jeste_nije | zamenjeno ##postojanje
+			
+			#postojanje | ~ceo_broj | n ##postojanje
+			#dodela | #~ugradjena_rutina | niz ##~ugradjena_rutina:duzina_strune | n ##dodela
+			
+			#naredba
+				#celina
+					
+					#dodela | nije | zamenjeno ##dodela
+					#dodela | 0 | j ##dodela
+					#naredba
+						#celina
+						
+							#naredba
+								#celina
+									#dodela | niz:j | tmp ##dodela
+									#dodela | niz:(j+1) | niz:j ##dodela
+									#dodela | tmp | niz:(j+1) ##dodela
+									#dodela | jeste | zamenjeno ##dodela					
+								##celina:da
+								#celina
+									niz:j > niz:(j+1)
+								##celina:pitanje
+							##naredba:uslov
+						
+							#dodela | j+1 | j ##dodela
+						##celina:ponovi
+						#celina
+							j < n - i - 1
+						##celina:pitanje
+					##naredba:ponavljanje
+					
+					#naredba
+						#celina
+							#prekini_ponavljanje
+						##celina:da
+						#celina
+							zamenjeno = nije
+						##celina:pitanje
+					##naredba:uslov
+					
+					#dodela | i+1 | i ##dodela
+				##celina:ponovi
+				#celina
+					i < n - 1
+				##celina:pitanje
+			##naredba:ponavljanje
+			
+			#vrati | niz ##vrati
+			
+		##celina:sadrzaj_rutine
+		#celina
+			#polje | ~struna | niz ##polje
+		##celina:polja
+	##rutina:sortiraj
+	
+	#rutina | 
+		#celina
+			#postojanje | ~ceo_broj | n ##postojanje
+			#dodela | #~ugradjena_rutina | niz ##~ugradjena_rutina:duzina_strune | n ##dodela
+			
+			#postojanje | ~ceo_broj | i ##postojanje
+			#dodela | 0 | i ##dodela
+			
+			#naredba
+				#celina
+					#~ugradjena_rutina | 
+						#~ugradjena_rutina | niz:i, " " ##~ugradjena_rutina:spoji_strune
+					##~ugradjena_rutina:ispisi
+					
+					#dodela | i+1 | i ##dodela
+				##celina:ponovi
+				#celina
+					i < n
+				##celina:pitanje
+			#naredba:ponavljanje
+			
+		##celina:sadrzaj_rutine
+		#celina
+			#polje | ~struna | niz ##polje
+		##celina:polja
+	##rutina:ispisi_strunu_lepo
+	
+	#postojanje | ~struna | niz ##postojanje
+	#dodela | #~ugradjena_rutina | ##~ugradjena_rutina:ucitaj | niz ##dodela
+	
+	#~rutina | 
+		#~rutina | niz ##~rutina:sortiraj
+	##~rutina:ispisi_strunu_lepo
+	
+##program
+
