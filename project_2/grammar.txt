@@ -2,16 +2,16 @@ PROGRAM -> '#program' PROGRAM_CELINA '##program'
 PROGRAM_CELINA -> ( POSTOJANJE | DODELA | NAREDBA | RUTINA )*
 
 NAREDBA -> NAREDBA_USLOV | NAREDBA_PONAVLJANJE
-NAREDBA_USLOV -> '#naredba' NAREDBA_USLOV_CELINA '##naredba:uslov'
+NAREDBA_USLOV -> '#naredba' NAREDBA_USLOV_CELINA '##naredba' ':' 'uslov'
 NAREDBA_USLOV_CELINA -> CELINA_PITANJE CELINA_DA CELINA_NE?
-NAREDBA_PONAVLJANJE -> '#naredba' NAREDBA_PONAVLJANJE_CELINA '##naredba:ponavljanje'
+NAREDBA_PONAVLJANJE -> '#naredba' NAREDBA_PONAVLJANJE_CELINA '##naredba' ':' 'ponavljanje'
 NAREDBA_PONAVLJANJE_CELINA -> CELINA_PITANJE CELINA_PONOVI
 
-RUTINA -> '#rutina|~' ( TIP_PODATKA )? CELINA_SADRZAJ_RUTINE '##rutina:' NAZIV
-RUTINA_POZIV -> '#~rutina|' ( ARGUMENT )? ( ',' ARGUMENT )* '##~rutina:' NAZIV
-UGRADJENA_RUTINA_POZIV -> '#~ugradjena_rutina|' ( ARGUMENT )? ( ',' ARGUMENT)* '##~ugradjena_rutina:' UGRADJENA_RUTINA_NAZIV
+RUTINA -> '#rutina' '|' ( TIP_PODATKA )? CELINA_SADRZAJ_RUTINE '##rutina:' NAZIV
+RUTINA_POZIV -> '#~rutina' '|' ( ARGUMENT )? ( ',' ARGUMENT )* '##~rutina:' NAZIV
+UGRADJENA_RUTINA_POZIV -> '#~ugradjena_rutina' '|' ( ARGUMENT )? ( ',' ARGUMENT )* '##~ugradjena_rutina:' UGRADJENA_RUTINA_NAZIV
 RUTINA_UGRADJENA_NAZIV -> 'ucitaj' | 'ispisi' | 'duzina_strune' | 'spoji_strune' | 'podeli_strunu'
-VRATI -> '#vrati|' IZRAZ '##vrati'
+VRATI -> '#vrati' '|' IZRAZ '##vrati'
 
 CELINA_PITANJE -> '#celina' LOGICKI_IZRAZ '##celina:pitanje'
 CELINA_DA -> '#celina' CELINA_CELINA '##celina:da'
@@ -21,11 +21,11 @@ CELINA_POLJA -> '#celina' ( POLJE )+ '##celina:polja'
 CELINA_SADRZAJ_RUTINE -> '#celina' CELINA_CELINA '##celina:sadrzaj_rutine'
 CELINA_CELINA -> ( POSTOJANJE | DODELA | NAREDBA | RUTINA_POZIV | UGRADJENA_RUTINA_POZIV )*
 
-POSTOJANJE -> '#postojanje|~' TIP_PODATKA '|' NAZIV '##postojanje'
-DODELA -> '#dodela|' IZRAZ '|' VARIJABLA '##dodela'
-POLJE -> '#polje|~' TIP_PODATKA '|' NAZIV '##polje'
+POSTOJANJE -> '#postojanje' '|' TIP_PODATKA '|' NAZIV '##postojanje'
+DODELA -> '#dodela' '|' IZRAZ '|' VARIJABLA '##dodela'
+POLJE -> '#polje' '|' TIP_PODATKA '|' NAZIV '##polje'
 
-TIP_PODATKA -> `ceo_broj` | `struna`
+TIP_PODATKA -> `~ceo_broj` | `~struna`
 VARIJABLA -> NAZIV | ELEMENT_NIZA
 ELEMENT_NIZA -> NAZIV ':' ( NAZIV | IZRAZ )
 
