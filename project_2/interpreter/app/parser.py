@@ -67,9 +67,9 @@ class Parser():
                 elif self.current_token.token_type == TIP_PODATKA:
                         return self.var_declaration_list()
                 else:
-                        self.error('some statement')
+                    self.error('Derivation error: NAREDBA')
 
-        def if_stmt(self):
+        def naredba_uslov(self):
                 self.eat(IF)
                 self.eat(LPAREN)
                 condition = self.logic()
