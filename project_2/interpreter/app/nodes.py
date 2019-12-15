@@ -51,30 +51,6 @@ class NaredbaPonavljanje(AST):
                 self.pitanje = pitanje
                 self.ponovi = ponovi
 
-class CelinaPitanje(AST):
-        def __init__(self, izraz):
-                self.izraz = izraz
-
-class CelinaDa(AST):
-        def __init__(self, celina):
-                self.celina = celina
-
-class CelinaNe(AST):
-        def __init__(self, celina):
-                self.celina = celina
-
-class CelinaPonovi(AST):
-        def __init__(self, celina):
-                self.celina = celina
-
-class CelinaPolje(AST):
-        def __init__(self, polje):
-                self.polje = polje
-
-class CelinaSadrzajRutine(AST):
-        def __init__(self, sadrzaj):
-                self.sadrzaj = sadrzaj
-
 class CelinaCelina(AST):
         def __init__(self, cvorovi):
                 self.cvorovi = cvorovi

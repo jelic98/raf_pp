@@ -86,10 +86,8 @@ class Parser():
                 pitanje = None
                 ponovi = None
                 if self.is_celina_pitanje():
-                        self.eat(CELINA_PITANJE)
                         pitanje = self.celina_pitanje()
                 if self.current_token.token_type == CELINA_PONOVI:
-                        self.eat(CELINA_PONOVI)
                         ponovi = self.celina_ponovi()
                 self.eat(NAREDBA_KRAJ)
                 self.eat(COLON)
@@ -153,7 +151,7 @@ class Parser():
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_PITANJE)
-                return CelinaPitanje(izraz)
+                return izraz
 
         @restorable
         def is_celina_da(self):
@@ -170,7 +168,7 @@ class Parser():
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_DA)
-                return CelinaDa(celina)
+                return celina
 
         @restorable
         def is_celina_ne(self):
@@ -187,7 +185,7 @@ class Parser():
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_NE)
-                return CelinaNe(celina)
+                return celina
 
         def celina_ponovi(self):
                 self.eat(CELINA_POCETAK)
@@ -195,7 +193,7 @@ class Parser():
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_PONOVI)
-                return CelinaPonovi(celina)
+                return celina
 
         def celina_polje(self):
                 self.eat(CELINA_POCETAK)
@@ -203,7 +201,7 @@ class Parser():
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_POLJE)
-                return CelinaPolje(celina)
+                return celina
 
         def celina_celina(self):
                 cvorovi = []

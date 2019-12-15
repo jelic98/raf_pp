@@ -15,7 +15,7 @@ class Interpreter(NodeVisitor):
         def __init__(self, parser):
                 self.parser = parser
                 self.ncount = 1
-                self.dot = Digraph(comment='Nas program')
+                self.dot = Digraph(comment='RafLang AST')
                 self.dot.node_attr['shape']='box'
                 self.dot.node_attr['fontsize'] = '12'
                 self.dot.node_attr['height'] = '.1'
@@ -99,12 +99,10 @@ class Interpreter(NodeVisitor):
                 self.ncount += 1
 
                 for arg in node.argumenti:
-                        self.visit(arg)
-                        self.dot.edge('node{}'.format(node._num), 'node{}'.format(arg._num))
+                        if arg is not None:
+                                self.visit(arg)
+                                self.dot.edge('node{}'.format(node._num), 'node{}'.format(arg._num))
         
-                node._num = self.ncount
-                self.ncount += 1
-
                 self.visit(node.naziv)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
 
@@ -117,7 +115,7 @@ class Interpreter(NodeVisitor):
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.izraz._num))
 
         def visit_NaredbaUslov(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'USLOV')
+                self.dot.node('node{}'.format(self.ncount), 'NAREDBA_USLOV')
                 node._num = self.ncount
                 self.ncount += 1
 
@@ -132,7 +130,7 @@ class Interpreter(NodeVisitor):
                         self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.ne._num))
 
         def visit_NaredbaPonavljanje(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'PONAVLJANJE')
+                self.dot.node('node{}'.format(self.ncount), 'NAREDBA_PONAVLJANJE')
                 node._num = self.ncount
                 self.ncount += 1
 
@@ -142,46 +140,14 @@ class Interpreter(NodeVisitor):
                 self.visit(node.ponovi)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.ponovi._num))
 
-        def visit_CelinaPitanje(self, node):
-                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.izraz))
-                node._num = self.ncount
-                self.ncount += 1
-
-        def visit_CelinaDa(self, node):
-                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.celina))
-                node._num = self.ncount
-                self.ncount += 1
-
-        def visit_CelinaNe(self, node):
-                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.celina))
-                node._num = self.ncount
-                self.ncount += 1
-
-        def visit_CelinaPonovi(self, node):
-                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.celina))
-                node._num = self.ncount
-                self.ncount += 1
-
-        def visit_CelinaPolje(self, node):
-                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.polje))
-                node._num = self.ncount
-                self.ncount += 1
-
-        def visit_CelinaSadrzajCeline(self, node):
-                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.sadrzaj))
-                node._num = self.ncount
-                self.ncount += 1
-
         def visit_CelinaCelina(self, node):
                 self.dot.node('node{}'.format(self.ncount), 'CELINA')
                 node._num = self.ncount
                 self.ncount += 1
 
-                stmts = node.stmts
-
-                for stmt in stmts:
-                        self.visit(stmt)
-                        self.dot.edge('node{}'.format(node._num), 'node{}'.format(stmt._num))
+                for cvor in node.cvorovi:
+                        self.visit(cvor)
+                        self.dot.edge('node{}'.format(node._num), 'node{}'.format(cvor._num))
 
         def visit_CeoBroj(self, node):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.broj))
