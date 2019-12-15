@@ -40,6 +40,10 @@ class Parser():
                                 cvorovi.append(self.naredba())
                         elif self.current_token.token_type == RUTINA_POCETAK:
                                 cvorovi.append(self.rutina())
+                        elif self.current_token.token_type == RUTINA_POZIV_POCETAK:
+                                cvorovi.append(self.rutina_poziv())
+                        elif self.current_token.token_type == UGRADJENA_RUTINA_POZIV_POCETAK:
+                                cvorovi.append(self.ugradjena_rutina_poziv())
                         else:
                                 self.error('Derivation error: PROGRAM')
                 return Program(cvorovi)
@@ -47,8 +51,8 @@ class Parser():
         def naredba(self):
                 if self.is_naredba_uslov():
                         return self.naredba_uslov()
-                elif self.current_token.token_type == NAREDBA_PONAVLJANJE:
-                        return self.vnaredba_ponavljanje()
+                elif self.is_naredba_ponavljanje():
+                        return self.naredba_ponavljanje()
                 else:
                         self.error('Derivation error: NAREDBA')
         
@@ -58,56 +62,51 @@ class Parser():
         @restorable
         def is_naredba_uslov(self):
                 self.eat(NAREDBA_POCETAK)
-                self.celina_da()
-                self.celina_ne()
-                self.celina_pitanje()
-                self.eat(NAREDBA_KRAJ)
-                self.eat(COLON)
+                if self.is_celina_da():
+                        self.celina_da()
+                if self.is_celina_ne():
+                        self.celina_ne()
+                if self.is_celina_pitanje():
+                        self.celina_pitanje()
+                if self.current_token.token_type == NAREDBA_KRAJ:
+                       self.eat(NAREDBA_KRAJ)
+                if self.current_token.token_type == COLON:
+                        self.eat(COLON)
                 return self.current_token.token_type == NAREDBA_USLOV
 
         def naredba_uslov(self):
                 self.eat(NAREDBA_POCETAK)
-                pitanje = None
-                da = None
+                da = self.celina_da()
                 ne = None
-                if self.is_celina_da():
-                        da = self.celina_da()
                 if self.is_celina_ne():
                         ne = self.celina_ne()
-                if self.is_celina_pitanje():
-                        pitanje = self.celina_pitanje()
+                pitanje = self.celina_pitanje()
                 self.eat(NAREDBA_KRAJ)
                 self.eat(COLON)
                 self.eat(NAREDBA_USLOV)
                 return NaredbaUslov(pitanje, da, ne)
 
+        @restorable
+        def is_naredba_ponavljanje(self):
+                self.eat(NAREDBA_POCETAK)
+                if self.is_celina_ponovi():
+                        self.celina_ponovi()
+                if self.is_celina_pitanje():
+                        self.celina_pitanje()
+                if self.current_token.token_type == NAREDBA_KRAJ:
+                        self.eat(NAREDBA_KRAJ)
+                if self.current_token.token_type == COLON:
+                        self.eat(COLON)
+                return self.current_token.token_type == NAREDBA_PONAVLJANJE
+
         def naredba_ponavljanje(self):
                 self.eat(NAREDBA_POCETAK)
-                pitanje = None
-                ponovi = None
-                if self.is_celina_pitanje():
-                        pitanje = self.celina_pitanje()
-                if self.current_token.token_type == CELINA_PONOVI:
-                        ponovi = self.celina_ponovi()
+                ponovi = self.celina_ponovi()
+                pitanje = self.celina_pitanje()
                 self.eat(NAREDBA_KRAJ)
                 self.eat(COLON)
                 self.eat(NAREDBA_PONAVLJANJE)
                 return NaredbaUslov(pitanje, ponovi)
-
-        def var_declaration_list(self):
-                declarations = []
-                type_node = Type_node(self.current_token.value)
-                self.eat(TIP_PODATKA)
-                var_node = Variable(self.current_token.value)
-                self.eat(NAZIV)
-                declarations.extend(self.var_declaration(type_node, var_node))
-                while self.current_token.token_type == COMMA:
-                        self.eat(COMMA)
-                        var_node = Variable(self.current_token.value)
-                        self.eat(NAZIV)
-                        declarations.extend(self.var_declaration(type_node, var_node))
-                self.eat(SEMICOLON)
-                return declarations
 
         def dodela(self):
                 self.eat(DODELA_POCETAK)
@@ -187,6 +186,15 @@ class Parser():
                 self.eat(CELINA_NE)
                 return celina
 
+        @restorable
+        def is_celina_ponovi(self):
+                self.eat(CELINA_POCETAK)
+                while self.current_token.token_type != CELINA_KRAJ:
+                    self.eat(self.current_token.token_type)
+                self.eat(CELINA_KRAJ)
+                self.eat(COLON)
+                return self.current_token.token_type == CELINA_PONOVI
+
         def celina_ponovi(self):
                 self.eat(CELINA_POCETAK)
                 celina = self.celina_celina()
@@ -201,6 +209,14 @@ class Parser():
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_POLJE)
+                return celina
+
+        def celina_sadrzaj_rutine(self):
+                self.eat(CELINA_POCETAK)
+                celina = self.celina_celina()
+                self.eat(CELINA_KRAJ)
+                self.eat(COLON)
+                self.eat(CELINA_SADRZAJ_RUTINE)
                 return celina
 
         def celina_celina(self):
@@ -219,6 +235,33 @@ class Parser():
                         else:
                             self.error('Derivation error: CELINA_CELINA')
                 return CelinaCelina(cvorovi)
+
+        def rutina(self):
+            self.eat(RUTINA_POCETAK)
+            self.eat(PIPE)
+            tip = None
+            if self.current_token.token_type == TIP_PODATKA:
+                tip = self.tip_podatka()
+            sadrzaj = self.celina_sadrzaj_rutine()
+            self.eat(RUTINA_KRAJ)
+            self.eat(COLON)
+            naziv = self.naziv()
+            return Rutina(tip, sadrzaj, naziv)
+
+        def rutina_poziv(self):
+            self.eat(RUTINA_POZIV_POCETAK)
+            self.eat(PIPE)
+            argumenti = []
+            while self.current_token.token_type != RUTINA_POZIV_KRAJ:
+                argumenti.append(self.logic())
+                if self.current_token.token_type == STRUNA:
+                    self.eat(STRUNA)
+                if self.current_token.token_type == COMMA:
+                    self.eat(COMMA)
+            self.eat(RUTINA_POZIV_KRAJ)
+            self.eat(COLON)
+            naziv = self.naziv()
+            return RutinaPoziv(argumenti, naziv)
 
         def ugradjena_rutina_poziv(self):
             self.eat(UGRADJENA_RUTINA_POZIV_POCETAK)
@@ -346,10 +389,10 @@ class Parser():
         def check_logic(self, node):
                 if str(type(node).__name__) == 'BinarnaOperacija':
                         if node.simbol not in ['<', '>', '>=', '<=', '=', '!=']:
-                                self.type_error('logical operator ', node.simbol)
+                                self.type_error('LOGICKI_OPERATOR', node.simbol)
                 elif str(type(node).__name__) == 'UnarnaOperacija':
                         if node.simbol not in ['!']:
-                                self.type_error('not', node.simbol)
+                                self.type_error('LOGICKO_NE', node.simbol)
                 else:
                     self.error('Derivation error: LOGIC')
 
@@ -360,11 +403,11 @@ class Parser():
                         self.check_logic(left_node)
                         right_node = self.compare()
                         self.check_logic(right_node)
-                        left_node = BinarnaOperacija(left_node, 'and', right_node)
+                        left_node = BinarnaOperacija(left_node, LOGICKO_I, right_node)
                 elif self.current_token.token_type == LOGICKO_ILI:
                         self.eat(LOGICKO_ILI)
                         self.check_logic(left_node)
                         right_node = self.compare()
                         self.check_logic(right_node)
-                        left_node = BinarnaOperacija(left_node, 'or', right_node)
+                        left_node = BinarnaOperacija(left_node, LOGICKO_ILI, right_node)
                 return left_node

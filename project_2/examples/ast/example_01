@@ -17,7 +17,7 @@ digraph {
 	node8 [label=n]
 	node5 -> node8
 	node1 -> node5
-	node9 [label=USLOV]
+	node9 [label=NAREDBA_USLOV]
 	node10 [label="="]
 	node11 [label="%"]
 	node12 [label=n]

@@ -108,7 +108,7 @@ class Lexer():
                 if self.pos >= len(self.text):
                         return Token(EOF, None)
                 current_char = self.text[self.pos]
-                token = {}
+                token = None
                 if current_char.isdigit():
                         token =  Token(CEO_BROJ, self.parse_number())
                 elif self.text[self.pos].isalpha() or self.text[self.pos] == '#' or self.text[self.pos] == '~':
@@ -143,8 +143,6 @@ class Lexer():
                     token = Token(COLON, ':')
                 elif current_char == ',':
                     token = Token(COMMA, ',')
-                elif current_char == '!':
-                        self.advance()
                 elif current_char == '(':
                         token = Token(OTVORENA_ZAGRADA, '(')
                 elif current_char == ')':
@@ -160,9 +158,9 @@ class Lexer():
                 elif current_char == '=':
                         token = Token(JEDNAKO, '=')
                 elif current_char == ':':
-                    token = Token(COLON, ':')
+                        token = Token(COLON, ':')
                 elif current_char == ',':
-                    token = Token(COMMA, ',')
+                        token = Token(COMMA, ',')
                 elif current_char == '!':
                         self.advance()
                         if self.current_char == '=':
@@ -182,8 +180,7 @@ class Lexer():
                                 token = Token(PIPE, '|')
                                 self.pos -= 1
                 else:
-                        print("CHAR: " + current_char)
-                        self.error("")
+                        self.error(current_char)
                 self.pos += 1
                 return token
 
