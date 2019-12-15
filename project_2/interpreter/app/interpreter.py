@@ -5,6 +5,7 @@ class NodeVisitor(object):
         def visit(self, node):
                 method_name = 'visit_' + type(node).__name__
                 visitor = getattr(self, method_name, 'error_method')
+                print(method_name)
                 return visitor(node)
 
         def error_method(self, node):
@@ -27,7 +28,7 @@ class Interpreter(NodeVisitor):
                 self.ncount += 1
 
                 for cvor in node.cvorovi:
-                        self.visit(child)
+                        self.visit(cvor)
                         self.dot.edge('node{}'.format(node._num), 'node{}'.format(cvor._num))
         
         def visit_Postojanje(self, node):
@@ -49,8 +50,8 @@ class Interpreter(NodeVisitor):
                 self.visit(node.izraz)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.izraz._num))
 
-                self.visit(node.naziv)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
+                self.visit(node.varijabla)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.varijabla._num))
 
         def visit_Polje(self, node):
                 self.dot.node('node{}'.format(self.ncount), 'POLJE')
@@ -97,7 +98,7 @@ class Interpreter(NodeVisitor):
                 node._num = self.ncount
                 self.ncount += 1
 
-                for arg in node.arguenti:
+                for arg in node.argumenti:
                         self.visit(arg)
                         self.dot.edge('node{}'.format(node._num), 'node{}'.format(arg._num))
         
@@ -141,32 +142,32 @@ class Interpreter(NodeVisitor):
                 self.visit(node.ponovi)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.ponovi._num))
 
-        def visit_Pitanje(self, node):
+        def visit_CelinaPitanje(self, node):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.izraz))
                 node._num = self.ncount
                 self.ncount += 1
 
-        def visit_Da(self, node):
+        def visit_CelinaDa(self, node):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.celina))
                 node._num = self.ncount
                 self.ncount += 1
 
-        def visit_Ne(self, node):
+        def visit_CelinaNe(self, node):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.celina))
                 node._num = self.ncount
                 self.ncount += 1
 
-        def visit_Ponovi(self, node):
+        def visit_CelinaPonovi(self, node):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.celina))
                 node._num = self.ncount
                 self.ncount += 1
 
-        def visit_Polje(self, node):
+        def visit_CelinaPolje(self, node):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.polje))
                 node._num = self.ncount
                 self.ncount += 1
 
-        def visit_SadrzajCeline(self, node):
+        def visit_CelinaSadrzajCeline(self, node):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.sadrzaj))
                 node._num = self.ncount
                 self.ncount += 1
@@ -189,6 +190,16 @@ class Interpreter(NodeVisitor):
 
         def visit_Struna(self, node):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.struna))
+                node._num = self.ncount
+                self.ncount += 1
+
+        def visit_TipPodatka(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.tip))
+                node._num = self.ncount
+                self.ncount += 1
+
+        def visit_Naziv(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.naziv))
                 node._num = self.ncount
                 self.ncount += 1
 

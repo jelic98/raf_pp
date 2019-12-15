@@ -1,0 +1,28 @@
+// Nas program
+digraph {
+	node [fontsize=12 height=.1 ranksep=.3 shape=box]
+	edge [arrowsize=.5]
+	node1 [label=PROGRAM]
+	node2 [label=POSTOJANJE]
+	node3 [label="~ceo_broj"]
+	node2 -> node3
+	node4 [label=n]
+	node2 -> node4
+	node1 -> node2
+	node5 [label=DODELA]
+	node6 [label=UGRADJENA_RUTINA_POZIV]
+	node8 [label=ucitaj]
+	node7 -> node8
+	node5 -> node7
+	node9 [label=n]
+	node5 -> node9
+	node1 -> node5
+	node10 [label=USLOV]
+	node11 [label=<app.nodes.BinarnaOperacija object at 0x102509190>]
+	node10 -> node11
+	node12 [label=<app.nodes.CelinaCelina object at 0x102509090>]
+	node10 -> node12
+	node13 [label=<app.nodes.CelinaCelina object at 0x1025091d0>]
+	node10 -> node13
+	node1 -> node10
+}

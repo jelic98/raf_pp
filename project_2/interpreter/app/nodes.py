@@ -83,9 +83,17 @@ class CeoBroj(AST):
         def __init__(self, broj):
                 self.broj = broj
 
+class TipPodatka(AST):
+        def __init__(self, tip):
+                self.tip = tip
+
 class Struna(AST):
         def __init__(self, struna):
                 self.struna = struna
+
+class Naziv(AST):
+        def __init__(self, naziv):
+                self.naziv = naziv
 
 class BinarnaOperacija(AST):
         def __init__(self, prvi, simbol, drugi):

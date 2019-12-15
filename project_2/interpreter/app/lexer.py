@@ -19,7 +19,12 @@ class Lexer():
                 return int(number)
         
         def parse_string(self):
-            pass
+                string = ''
+                self.pos += 1
+                while(self.pos < len(self.text) and self.text[self.pos] != '"'):
+                        string += self.text[self.pos]
+                        self.pos += 1
+                return string
 
         def parse_keyword(self):
                 string = ''
@@ -33,61 +38,61 @@ class Lexer():
                         self.pos += 1
                 self.pos -= 1
                 if string == '#program':
-                        return Token(PROGRAM_POCETAK, True)
+                        return Token(PROGRAM_POCETAK, string)
                 elif string == '##program':
-                        return Token(PROGRAM_KRAJ, True)
+                        return Token(PROGRAM_KRAJ, string)
                 elif string == '#postojanje':
-                        return Token(POSTOJANJE_POCETAK, True)
+                        return Token(POSTOJANJE_POCETAK, string)
                 elif string == '##postojanje':
-                        return Token(POSTOJANJE_KRAJ, True)
+                        return Token(POSTOJANJE_KRAJ, string)
                 elif string == '#dodela':
-                        return Token(DODELA_POCETAK, True)
+                        return Token(DODELA_POCETAK, string)
                 elif string == '##dodela':
-                        return Token(DODELA_KRAJ, True)
+                        return Token(DODELA_KRAJ, string)
                 elif string == '#polje':
-                        return Token(POLJE_POCETAK, True)
+                        return Token(POLJE_POCETAK, string)
                 elif string == '##polje':
-                        return Token(POLJE_KRAJ, True)
+                        return Token(POLJE_KRAJ, string)
                 elif string == '#naredba':
-                        return Token(NAREDBA_POCETAK, True)
+                        return Token(NAREDBA_POCETAK, string)
                 elif string == '##naredba':
-                        return Token(NAREDBA_KRAJ, True)
+                        return Token(NAREDBA_KRAJ, string)
                 elif string == '#celina':
-                        return Token(CELINA_POCETAK, True)
+                        return Token(CELINA_POCETAK, string)
                 elif string == '##celina':
-                        return Token(CELINA_KRAJ, True)
+                        return Token(CELINA_KRAJ, string)
                 elif string == '#rutina':
-                        return Token(RUTINA_POCETAK, True)
+                        return Token(RUTINA_POCETAK, string)
                 elif string == '#rutina':
-                        return Token(RUTINA_KRAJ, True)
+                        return Token(RUTINA_KRAJ, string)
                 elif string == '#~rutina':
-                        return Token(RUTINA_POZIV_POCETAK, True)
+                        return Token(RUTINA_POZIV_POCETAK, string)
                 elif string == '##~rutina':
-                        return Token(RUTINA_POZIV_KRAJ, True)
+                        return Token(RUTINA_POZIV_KRAJ, string)
                 elif string == '#~ugradjena_rutina':
-                        return Token(UGRADJENA_RUTINA_POZIV_POCETAK, True)
+                        return Token(UGRADJENA_RUTINA_POZIV_POCETAK, string)
                 elif string == '##~ugradjena_rutina':
-                        return Token(UGRADJENA_RUTINA_POZIV_KRAJ, True)
+                        return Token(UGRADJENA_RUTINA_POZIV_KRAJ, string)
                 elif string == '#vrati':
-                        return Token(VRATI_POCETAK, True)
+                        return Token(VRATI_POCETAK, string)
                 elif string == '##vrati':
-                        return Token(VRATI_KRAJ, True)
+                        return Token(VRATI_KRAJ, string)
                 elif string == 'uslov':
-                        return Token(NAREDBA_USLOV, True)
+                        return Token(NAREDBA_USLOV, string)
                 elif string == 'ponavljanje':
-                        return Token(NAREDA_PONAVLJANJE, True)
+                        return Token(NAREDA_PONAVLJANJE, string)
                 elif string == 'pitanje':
-                        return Token(CELINA_DA, True)
+                        return Token(CELINA_PITANJE, string)
                 elif string == 'da':
-                        return Token(CELINA_NE, True)
+                        return Token(CELINA_DA, string)
                 elif string == 'ne':
-                        return Token(CELINA_PONOVI, True)
+                        return Token(CELINA_NE, string)
                 elif string == 'ponovi':
-                        return Token(CELINA_POLJA, True)
+                        return Token(CELINA_PONOVI, string)
                 elif string == 'polja':
-                        return Token(CELINA_POLJA, True)
+                        return Token(CELINA_POLJA, string)
                 elif string == 'sadrzaj_rutine':
-                        return Token(CELINA_SADRZAJ_RUTINE, True)
+                        return Token(CELINA_SADRZAJ_RUTINE, string)
                 elif string == '~ceo_broj' or string == '~struna':
                         return Token(TIP_PODATKA, string)
                 return Token(NAZIV, string)
@@ -119,7 +124,7 @@ class Lexer():
                 elif current_char == '/':
                         token = Token(DELJENJE, '/')
                 elif current_char == '%':
-                        token = Token(OSTATAK, '/')
+                        token = Token(OSTATAK, '%')
                 elif current_char == '(':
                         token = Token(OTVORENA_ZAGRADA, '(')
                 elif current_char == ')':
