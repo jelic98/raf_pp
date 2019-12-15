@@ -1,0 +1,158 @@
+// RafLang AST
+digraph {
+	node [fontsize=12 height=.1 ranksep=.3 shape=box]
+	edge [arrowsize=.5]
+	node1 [label=PROGRAM]
+	node2 [label=RUTINA]
+	node3 [label="~ceo_broj"]
+	node2 -> node3
+	node4 [label=CELINA]
+	node5 [label=POSTOJANJE]
+	node6 [label="~ceo_broj"]
+	node5 -> node6
+	node7 [label=i]
+	node5 -> node7
+	node4 -> node5
+	node8 [label=DODELA]
+	node9 [label=1]
+	node8 -> node9
+	node10 [label=i]
+	node8 -> node10
+	node4 -> node8
+	node11 [label=POSTOJANJE]
+	node12 [label="~ceo_broj"]
+	node11 -> node12
+	node13 [label=rezultat]
+	node11 -> node13
+	node4 -> node11
+	node14 [label=DODELA]
+	node15 [label=0]
+	node14 -> node15
+	node16 [label=rezultat]
+	node14 -> node16
+	node4 -> node14
+	node17 [label=NAREDBA_PONAVLJANJE]
+	node18 [label="!="]
+	node19 [label=i]
+	node18 -> node19
+	node20 [label=n]
+	node18 -> node20
+	node17 -> node18
+	node21 [label=CELINA]
+	node22 [label=DODELA]
+	node23 [label="+"]
+	node24 [label=rezultat]
+	node23 -> node24
+	node25 [label=i]
+	node23 -> node25
+	node22 -> node23
+	node26 [label=rezultat]
+	node22 -> node26
+	node21 -> node22
+	node27 [label=DODELA]
+	node28 [label="+"]
+	node29 [label=i]
+	node28 -> node29
+	node30 [label=1]
+	node28 -> node30
+	node27 -> node28
+	node31 [label=i]
+	node27 -> node31
+	node21 -> node27
+	node17 -> node21
+	node4 -> node17
+	node32 [label=VRATI]
+	node33 [label=rezultat]
+	node32 -> node33
+	node4 -> node32
+	node2 -> node4
+	node34 [label=izracunaj_proizvod]
+	node2 -> node34
+	node1 -> node2
+	node35 [label=POSTOJANJE]
+	node36 [label="~ceo_broj"]
+	node35 -> node36
+	node37 [label=n]
+	node35 -> node37
+	node1 -> node35
+	node38 [label=DODELA]
+	node39 [label=UGRADJENA_RUTINA_POZIV]
+	node40 [label=ucitaj]
+	node39 -> node40
+	node38 -> node39
+	node41 [label=n]
+	node38 -> node41
+	node1 -> node38
+	node42 [label=POSTOJANJE]
+	node43 [label="~struna"]
+	node42 -> node43
+	node44 [label=opcija]
+	node42 -> node44
+	node1 -> node42
+	node45 [label=DODELA]
+	node46 [label=UGRADJENA_RUTINA_POZIV]
+	node47 [label=ucitaj]
+	node46 -> node47
+	node45 -> node46
+	node48 [label=opcija]
+	node45 -> node48
+	node1 -> node45
+	node49 [label=NAREDBA_USLOV]
+	node50 [label=LOGICKO_ILI]
+	node51 [label="="]
+	node52 [label=opcija]
+	node51 -> node52
+	node53 [label=zbir]
+	node51 -> node53
+	node50 -> node51
+	node54 [label="="]
+	node55 [label=opcija]
+	node54 -> node55
+	node56 [label=proizvod]
+	node54 -> node56
+	node50 -> node54
+	node49 -> node50
+	node57 [label=CELINA]
+	node58 [label=NAREDBA_USLOV]
+	node59 [label="="]
+	node60 [label=opcija]
+	node59 -> node60
+	node61 [label=zbir]
+	node59 -> node61
+	node58 -> node59
+	node62 [label=CELINA]
+	node63 [label=UGRADJENA_RUTINA_POZIV]
+	node64 [label=RUTINA_POZIV]
+	node65 [label=n]
+	node64 -> node65
+	node66 [label=izracunaj_zbir]
+	node64 -> node66
+	node63 -> node64
+	node67 [label=ispisi]
+	node63 -> node67
+	node62 -> node63
+	node58 -> node62
+	node68 [label=CELINA]
+	node69 [label=UGRADJENA_RUTINA_POZIV]
+	node70 [label=RUTINA_POZIV]
+	node71 [label=n]
+	node70 -> node71
+	node72 [label=izracunaj_proizvod]
+	node70 -> node72
+	node69 -> node70
+	node73 [label=ispisi]
+	node69 -> node73
+	node68 -> node69
+	node58 -> node68
+	node57 -> node58
+	node49 -> node57
+	node74 [label=CELINA]
+	node75 [label=UGRADJENA_RUTINA_POZIV]
+	node76 [label="Uneta opcija nije validna"]
+	node75 -> node76
+	node77 [label=ispisi]
+	node75 -> node77
+	node74 -> node75
+	node49 -> node74
+	node1 -> node49
+}

@@ -30,15 +30,19 @@ digraph {
 	node9 -> node10
 	node15 [label=CELINA]
 	node16 [label=UGRADJENA_RUTINA_POZIV]
-	node17 [label=ispisi]
+	node17 [label="Paran broj"]
 	node16 -> node17
+	node18 [label=ispisi]
+	node16 -> node18
 	node15 -> node16
 	node9 -> node15
-	node18 [label=CELINA]
-	node19 [label=UGRADJENA_RUTINA_POZIV]
-	node20 [label=ispisi]
+	node19 [label=CELINA]
+	node20 [label=UGRADJENA_RUTINA_POZIV]
+	node21 [label="Neparan broj"]
+	node20 -> node21
+	node22 [label=ispisi]
+	node20 -> node22
 	node19 -> node20
-	node18 -> node19
-	node9 -> node18
+	node9 -> node19
 	node1 -> node9
 }

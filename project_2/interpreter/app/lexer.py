@@ -63,7 +63,7 @@ class Lexer():
                         return Token(CELINA_KRAJ, string)
                 elif string == '#rutina':
                         return Token(RUTINA_POCETAK, string)
-                elif string == '#rutina':
+                elif string == '##rutina':
                         return Token(RUTINA_KRAJ, string)
                 elif string == '#~rutina':
                         return Token(RUTINA_POZIV_POCETAK, string)
@@ -80,7 +80,7 @@ class Lexer():
                 elif string == 'uslov':
                         return Token(NAREDBA_USLOV, string)
                 elif string == 'ponavljanje':
-                        return Token(NAREDA_PONAVLJANJE, string)
+                        return Token(NAREDBA_PONAVLJANJE, string)
                 elif string == 'pitanje':
                         return Token(CELINA_PITANJE, string)
                 elif string == 'da':

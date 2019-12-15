@@ -93,20 +93,22 @@ class Parser():
                         self.celina_ponovi()
                 if self.is_celina_pitanje():
                         self.celina_pitanje()
-                if self.current_token.token_type == NAREDBA_KRAJ:
-                        self.eat(NAREDBA_KRAJ)
-                if self.current_token.token_type == COLON:
-                        self.eat(COLON)
+                while self.current_token.token_type != NAREDBA_KRAJ:
+                        self.eat(self.current_token.token_type)
+                self.eat(NAREDBA_KRAJ)
+                self.eat(COLON)
                 return self.current_token.token_type == NAREDBA_PONAVLJANJE
 
         def naredba_ponavljanje(self):
                 self.eat(NAREDBA_POCETAK)
                 ponovi = self.celina_ponovi()
                 pitanje = self.celina_pitanje()
+                while self.current_token.token_type != NAREDBA_KRAJ:
+                        self.eat(self.current_token.token_type)
                 self.eat(NAREDBA_KRAJ)
                 self.eat(COLON)
                 self.eat(NAREDBA_PONAVLJANJE)
-                return NaredbaUslov(pitanje, ponovi)
+                return NaredbaPonavljanje(pitanje, ponovi)
 
         def dodela(self):
                 self.eat(DODELA_POCETAK)
@@ -232,17 +234,32 @@ class Parser():
                                 cvorovi.append(self.rutina_poziv())
                         elif self.current_token.token_type == UGRADJENA_RUTINA_POZIV_POCETAK:
                                 cvorovi.append(self.ugradjena_rutina_poziv())
+                        elif self.current_token.token_type == VRATI_POCETAK:
+                                cvorovi.append(self.vrati())
                         else:
                             self.error('Derivation error: CELINA_CELINA')
                 return CelinaCelina(cvorovi)
+
+        def jump(self, start, end):
+            depth = 0
+            while self.current_token.token_type != EOF:
+                    if self.current_token.token_type == start:
+                        depth += 1
+                    elif self.current_token.token_type == end:
+                        depth -= 1
+                        if depth < 0:
+                            break
+                    self.eat(self.current_token.token_type)
+
 
         def rutina(self):
             self.eat(RUTINA_POCETAK)
             self.eat(PIPE)
             tip = None
             if self.current_token.token_type == TIP_PODATKA:
-                tip = self.tip_podatka()
+                    tip = self.tip_podatka()
             sadrzaj = self.celina_sadrzaj_rutine()
+            self.jump(RUTINA_POCETAK, RUTINA_KRAJ)
             self.eat(RUTINA_KRAJ)
             self.eat(COLON)
             naziv = self.naziv()
@@ -278,6 +295,13 @@ class Parser():
             naziv = self.naziv()
             return UgradjenaRutinaPoziv(argumenti, naziv)
 
+        def vrati(self):
+                self.eat(VRATI_POCETAK)
+                self.eat(PIPE)
+                izraz = self.logic()
+                self.eat(VRATI_KRAJ)
+                return Vrati(izraz)
+
         def tip_podatka(self):
                 if self.current_token.token_type == TIP_PODATKA:
                         tip = TipPodatka(self.current_token.value)
@@ -302,6 +326,9 @@ class Parser():
                 elif token.token_type == NAZIV:
                         self.eat(NAZIV)
                         return Naziv(token.value)
+                elif token.token_type == STRUNA:
+                        self.eat(STRUNA)
+                        return Naziv(token.value)
                 elif token.token_type in [MINUS, LOGICKO_NE]:
                         op_token = self.current_token
                         if op_token.token_type == MINUS:
@@ -324,7 +351,7 @@ class Parser():
                         self.eat(ZAGRADA_ZATVORENA)
                         return result
                 elif token.token_type == RUTINA_POZIV_POCETAK:
-                        return rutina_poziv()
+                        return self.rutina_poziv()
                 elif token.token_type == UGRADJENA_RUTINA_POZIV_POCETAK:
                         return self.ugradjena_rutina_poziv()
 

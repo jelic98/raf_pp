@@ -83,13 +83,11 @@ class Interpreter(NodeVisitor):
                 node._num = self.ncount
                 self.ncount += 1
 
-                for arg in node.arguenti:
-                        self.visit(arg)
-                        self.dot.edge('node{}'.format(node._num), 'node{}'.format(arg._num))
+                for arg in node.argumenti:
+                        if arg is not None:
+                                self.visit(arg)
+                                self.dot.edge('node{}'.format(node._num), 'node{}'.format(arg._num))
         
-                node._num = self.ncount
-                self.ncount += 1
-
                 self.visit(node.naziv)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
 

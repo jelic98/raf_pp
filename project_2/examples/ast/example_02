@@ -19,12 +19,14 @@ digraph {
 	node1 -> node5
 	node9 [label=UGRADJENA_RUTINA_POZIV]
 	node10 [label=UGRADJENA_RUTINA_POZIV]
-	node11 [label=ime]
+	node11 [label="Zdravo, "]
 	node10 -> node11
-	node12 [label=spoji_strune]
+	node12 [label=ime]
 	node10 -> node12
+	node13 [label=spoji_strune]
+	node10 -> node13
 	node9 -> node10
-	node13 [label=ispisi]
-	node9 -> node13
+	node14 [label=ispisi]
+	node9 -> node14
 	node1 -> node9
 }
