@@ -78,16 +78,24 @@ class Interpreter(NodeVisitor):
                 self.visit(node.naziv)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
 
+        def visit_Argumenti(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'ARGUMENTI')
+                node._num = self.ncount
+                self.ncount += 1
+                
+                for arg in node.argumenti:
+                        if arg is not None:
+                                self.visit(arg)
+                                self.dot.edge('node{}'.format(node._num), 'node{}'.format(arg._num))
+
         def visit_RutinaPoziv(self, node):
                 self.dot.node('node{}'.format(self.ncount), 'RUTINA_POZIV')
                 node._num = self.ncount
                 self.ncount += 1
 
-                for arg in node.argumenti:
-                        if arg is not None:
-                                self.visit(arg)
-                                self.dot.edge('node{}'.format(node._num), 'node{}'.format(arg._num))
-        
+                self.visit(node.argumenti)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.argumenti._num))
+                
                 self.visit(node.naziv)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
 
@@ -96,11 +104,9 @@ class Interpreter(NodeVisitor):
                 node._num = self.ncount
                 self.ncount += 1
 
-                for arg in node.argumenti:
-                        if arg is not None:
-                                self.visit(arg)
-                                self.dot.edge('node{}'.format(node._num), 'node{}'.format(arg._num))
-        
+                self.visit(node.argumenti)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.argumenti._num))
+                
                 self.visit(node.naziv)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
 
@@ -144,7 +150,7 @@ class Interpreter(NodeVisitor):
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.ponovi._num))
 
         def visit_CelinaCelina(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'CELINA')
+                self.dot.node('node{}'.format(self.ncount), 'CELINA_' + node.tip)
                 node._num = self.ncount
                 self.ncount += 1
 
@@ -158,7 +164,7 @@ class Interpreter(NodeVisitor):
                 self.ncount += 1
 
         def visit_Struna(self, node):
-                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.struna))
+                self.dot.node('node{}'.format(self.ncount), '"{}"'.format(node.struna))
                 node._num = self.ncount
                 self.ncount += 1
 

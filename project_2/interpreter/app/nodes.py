@@ -20,6 +20,10 @@ class Polje(AST):
                 self.tip = tip
                 self.naziv = naziv
 
+class Argumenti(AST):
+        def __init__(self, argumenti):
+                self.argumenti = argumenti
+
 class Rutina(AST):
         def __init__(self, tip, sadrzaj, naziv):
                 self.tip = tip
@@ -55,8 +59,9 @@ class NaredbaPonavljanje(AST):
                 self.ponovi = ponovi
 
 class CelinaCelina(AST):
-        def __init__(self, cvorovi):
+        def __init__(self, cvorovi, tip):
                 self.cvorovi = cvorovi
+                self.tip = tip
 
 class TipPodatka(AST):
         def __init__(self, tip):

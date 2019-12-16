@@ -173,7 +173,7 @@ class Parser():
 
         def celina_da(self):
                 self.eat(CELINA_POCETAK)
-                celina = self.celina_celina()
+                celina = self.celina_celina('DA')
                 self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
@@ -190,7 +190,7 @@ class Parser():
 
         def celina_ne(self):
                 self.eat(CELINA_POCETAK)
-                celina = self.celina_celina()
+                celina = self.celina_celina('NE')
                 self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
@@ -207,7 +207,7 @@ class Parser():
 
         def celina_ponovi(self):
                 self.eat(CELINA_POCETAK)
-                celina = self.celina_celina()
+                celina = self.celina_celina('PONOVI')
                 self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
@@ -225,14 +225,14 @@ class Parser():
 
         def celina_sadrzaj_rutine(self):
                 self.eat(CELINA_POCETAK)
-                celina = self.celina_celina()
+                celina = self.celina_celina('SADRZAJ_RUTINE')
                 self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_SADRZAJ_RUTINE)
                 return celina
 
-        def celina_celina(self):
+        def celina_celina(self, tip):
                 cvorovi = []
                 while self.current_token.token_type != CELINA_KRAJ:
                         if self.current_token.token_type == POSTOJANJE_POCETAK:
@@ -251,7 +251,7 @@ class Parser():
                                 cvorovi.append(self.prekini_ponavljanje())
                         else:
                             self.error('Derivation error: CELINA_CELINA')
-                return CelinaCelina(cvorovi)
+                return CelinaCelina(cvorovi, tip)
 
         def rutina(self):
             self.eat(RUTINA_POCETAK)
@@ -279,7 +279,7 @@ class Parser():
             self.eat(RUTINA_POZIV_KRAJ)
             self.eat(COLON)
             naziv = self.naziv()
-            return RutinaPoziv(argumenti, naziv)
+            return RutinaPoziv(Argumenti(argumenti), naziv)
 
         def ugradjena_rutina_poziv(self):
             self.eat(UGRADJENA_RUTINA_POZIV_POCETAK)
@@ -294,7 +294,7 @@ class Parser():
             self.eat(UGRADJENA_RUTINA_POZIV_KRAJ)
             self.eat(COLON)
             naziv = self.naziv()
-            return UgradjenaRutinaPoziv(argumenti, naziv)
+            return UgradjenaRutinaPoziv(Argumenti(argumenti), naziv)
 
         def vrati(self):
                 self.eat(VRATI_POCETAK)
