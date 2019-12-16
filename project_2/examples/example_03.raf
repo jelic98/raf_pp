@@ -16,7 +16,7 @@
 				#celina
 					i != n
 				##celina:pitanje
-			#naredba:ponavljanje
+			##naredba:ponavljanje
 			
 			#vrati | rezultat ##vrati
 			

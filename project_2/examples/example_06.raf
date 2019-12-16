@@ -31,13 +31,13 @@
 				##celina:pitanje				
 			##naredba:ponavljanje
 			
-			#vrati max_duzina ##vrati
+			#vrati | max_duzina ##vrati
 			
 		##celina:sadrzaj_rutine
 		#celina
 			#polje | ~struna | reci ##polje
 			#polje | ~ceo_broj | broj_reci ##polje
-		#celina:polja
+		##celina:polja
 	##rutina:duzina_najduze_reci
 	
 	#rutina | ~struna
@@ -55,7 +55,7 @@
 				##celina:pitanje
 			##naredba:ponavljanje
 			
-			#vrati zvezdice ##vrati
+			#vrati | zvezdice ##vrati
 			
 		##celina:sadrzaj_rutine
 		#celina
@@ -154,11 +154,11 @@
 			#dodela | "*" | resenje:(i+1):(j+3) ##dodela
 			
 			
-			#dodela i+1 | i ##dodela
+			#dodela | i+1 | i ##dodela
 		##celina:ponovi
 		#celina
 			i < broj_reci
-		#celina:pitanje
+		##celina:pitanje
 	##naredba:ponavljanje
 	
 	#dodela | #~rutina | max_duzina ##~rutina:red_zvezdica | resenje:(broj_reci + 1) ##dodela

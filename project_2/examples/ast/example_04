@@ -1,0 +1,156 @@
+// RafLang AST
+digraph {
+	node [fontsize=12 height=.1 ranksep=.3 shape=box]
+	edge [arrowsize=.5]
+	node1 [label=PROGRAM]
+	node2 [label=POSTOJANJE]
+	node3 [label="~ceo_broj"]
+	node2 -> node3
+	node4 [label=tajni_broj]
+	node2 -> node4
+	node1 -> node2
+	node5 [label=DODELA]
+	node6 [label=3]
+	node5 -> node6
+	node7 [label=tajni_broj]
+	node5 -> node7
+	node1 -> node5
+	node8 [label=POSTOJANJE]
+	node9 [label="~struna"]
+	node8 -> node9
+	node10 [label=pokusaji]
+	node8 -> node10
+	node1 -> node8
+	node11 [label=POSTOJANJE]
+	node12 [label="~ceo_broj"]
+	node11 -> node12
+	node13 [label=i]
+	node11 -> node13
+	node1 -> node11
+	node14 [label=DODELA]
+	node15 [label=0]
+	node14 -> node15
+	node16 [label=i]
+	node14 -> node16
+	node1 -> node14
+	node17 [label=NAREDBA_PONAVLJANJE]
+	node18 [label="<"]
+	node19 [label=i]
+	node18 -> node19
+	node20 [label=10]
+	node18 -> node20
+	node17 -> node18
+	node21 [label=CELINA]
+	node22 [label=DODELA]
+	node23 [label=0]
+	node22 -> node23
+	node24 [label=ELEMENT_NIZA]
+	node25 [label=pokusaji]
+	node24 -> node25
+	node26 [label=i]
+	node24 -> node26
+	node22 -> node24
+	node21 -> node22
+	node27 [label=DODELA]
+	node28 [label="+"]
+	node29 [label=i]
+	node28 -> node29
+	node30 [label=1]
+	node28 -> node30
+	node27 -> node28
+	node31 [label=i]
+	node27 -> node31
+	node21 -> node27
+	node17 -> node21
+	node1 -> node17
+	node32 [label=POSTOJANJE]
+	node33 [label="~ceo_broj"]
+	node32 -> node33
+	node34 [label=n]
+	node32 -> node34
+	node1 -> node32
+	node35 [label=DODELA]
+	node36 [label="-"]
+	node37 [label=1]
+	node36 -> node37
+	node35 -> node36
+	node38 [label=n]
+	node35 -> node38
+	node1 -> node35
+	node39 [label=POSTOJANJE]
+	node40 [label="~ceo_broj"]
+	node39 -> node40
+	node41 [label=broj_pokusaja]
+	node39 -> node41
+	node1 -> node39
+	node42 [label=DODELA]
+	node43 [label=0]
+	node42 -> node43
+	node44 [label=broj_pokusaja]
+	node42 -> node44
+	node1 -> node42
+	node45 [label=NAREDBA_PONAVLJANJE]
+	node46 [label="!="]
+	node47 [label=n]
+	node46 -> node47
+	node48 [label=tajni_broj]
+	node46 -> node48
+	node45 -> node46
+	node49 [label=CELINA]
+	node50 [label=DODELA]
+	node51 [label=UGRADJENA_RUTINA_POZIV]
+	node52 [label=ucitaj]
+	node51 -> node52
+	node50 -> node51
+	node53 [label=n]
+	node50 -> node53
+	node49 -> node50
+	node54 [label=NAREDBA_USLOV]
+	node55 [label="="]
+	node56 [label=ELEMENT_NIZA]
+	node57 [label=pokusaji]
+	node56 -> node57
+	node58 [label=n]
+	node56 -> node58
+	node55 -> node56
+	node59 [label=0]
+	node55 -> node59
+	node54 -> node55
+	node60 [label=CELINA]
+	node61 [label=DODELA]
+	node62 [label=1]
+	node61 -> node62
+	node63 [label=ELEMENT_NIZA]
+	node64 [label=pokusaji]
+	node63 -> node64
+	node65 [label=n]
+	node63 -> node65
+	node61 -> node63
+	node60 -> node61
+	node66 [label=DODELA]
+	node67 [label="+"]
+	node68 [label=broj_pokusaja]
+	node67 -> node68
+	node69 [label=1]
+	node67 -> node69
+	node66 -> node67
+	node70 [label=broj_pokusaja]
+	node66 -> node70
+	node60 -> node66
+	node54 -> node60
+	node49 -> node54
+	node45 -> node49
+	node1 -> node45
+	node71 [label=UGRADJENA_RUTINA_POZIV]
+	node72 [label=UGRADJENA_RUTINA_POZIV]
+	node73 [label="Broj pokusaja je bio: "]
+	node72 -> node73
+	node74 [label=broj_pokusaja]
+	node72 -> node74
+	node75 [label=spoji_strune]
+	node72 -> node75
+	node71 -> node72
+	node76 [label=ispisi]
+	node71 -> node76
+	node1 -> node71
+}

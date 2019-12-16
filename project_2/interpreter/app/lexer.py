@@ -77,6 +77,8 @@ class Lexer():
                         return Token(VRATI_POCETAK, string)
                 elif string == '##vrati':
                         return Token(VRATI_KRAJ, string)
+                elif string == '#prekini_ponavljanje':
+                        return Token(PREKINI_PONAVLJANJE, string)
                 elif string == 'uslov':
                         return Token(NAREDBA_USLOV, string)
                 elif string == 'ponavljanje':
@@ -93,8 +95,10 @@ class Lexer():
                         return Token(CELINA_POLJA, string)
                 elif string == 'sadrzaj_rutine':
                         return Token(CELINA_SADRZAJ_RUTINE, string)
-                elif string == '~ceo_broj' or string == '~struna':
+                elif string == '~ceo_broj' or string == '~struna' or string == '~jeste_nije':
                         return Token(TIP_PODATKA, string)
+                elif string == 'jeste' or string == 'nije':
+                        return Token(JESTE_NIJE, string)
                 return Token(NAZIV, string)
 
         def advance(self):
@@ -126,9 +130,9 @@ class Lexer():
                 elif current_char == '%':
                         token = Token(OSTATAK, '%')
                 elif current_char == '(':
-                        token = Token(OTVORENA_ZAGRADA, '(')
+                        token = Token(ZAGRADA_OTVORENA, '(')
                 elif current_char == ')':
-                        token = Token(ZATVORENA_ZAGRADA, ')')
+                        token = Token(ZAGRADA_ZATVORENA, ')')
                 elif current_char == '<':
                         token = Token(MANJE, '<')
                 elif current_char == '>':
@@ -143,10 +147,6 @@ class Lexer():
                     token = Token(COLON, ':')
                 elif current_char == ',':
                     token = Token(COMMA, ',')
-                elif current_char == '(':
-                        token = Token(OTVORENA_ZAGRADA, '(')
-                elif current_char == ')':
-                        token = Token(ZATVORENA_ZAGRADA, ')')
                 elif current_char == '<':
                         token = Token(MANJE, '<')
                 elif current_char == '>':

@@ -5,7 +5,6 @@ class NodeVisitor(object):
         def visit(self, node):
                 method_name = 'visit_' + type(node).__name__
                 visitor = getattr(self, method_name, 'error_method')
-                print(method_name)
                 return visitor(node)
 
         def error_method(self, node):
@@ -68,9 +67,10 @@ class Interpreter(NodeVisitor):
                 self.dot.node('node{}'.format(self.ncount), 'RUTINA')
                 node._num = self.ncount
                 self.ncount += 1
-
-                self.visit(node.tip)
-                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.tip._num))
+                
+                if node.tip is not None:
+                    self.visit(node.tip)
+                    self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.tip._num))
 
                 self.visit(node.sadrzaj)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.sadrzaj._num))
@@ -111,6 +111,11 @@ class Interpreter(NodeVisitor):
 
                 self.visit(node.izraz)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.izraz._num))
+
+        def visit_PrekiniPonavljanje(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'PREKINI_PONAVLJANJE')
+                node._num = self.ncount
+                self.ncount += 1
 
         def visit_NaredbaUslov(self, node):
                 self.dot.node('node{}'.format(self.ncount), 'NAREDBA_USLOV')
@@ -157,6 +162,11 @@ class Interpreter(NodeVisitor):
                 node._num = self.ncount
                 self.ncount += 1
 
+        def visit_JesteNije(self, node):
+                self.dot.node('node{}'.format(self.ncount), '{}'.format(node.jestenije))
+                node._num = self.ncount
+                self.ncount += 1
+
         def visit_TipPodatka(self, node):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.tip))
                 node._num = self.ncount
@@ -166,6 +176,19 @@ class Interpreter(NodeVisitor):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.naziv))
                 node._num = self.ncount
                 self.ncount += 1
+
+        def visit_ElementNiza(self, node):
+                self.dot.node('node{}'.format(self.ncount), 'ELEMENT_NIZA')
+                node._num = self.ncount
+                self.ncount += 1
+                
+                self.visit(node.naziv)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
+
+                for indeks in node.indeksi:
+                        if indeks is not None:
+                                self.visit(indeks)
+                                self.dot.edge('node{}'.format(node._num), 'node{}'.format(indeks._num))
 
         def visit_BinarnaOperacija(self, node):
                 self.dot.node('node{}'.format(self.ncount), '{}'.format(node.simbol))

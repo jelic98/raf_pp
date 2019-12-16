@@ -40,6 +40,9 @@ class Vrati(AST):
         def __init__(self, izraz):
                 self.izraz = izraz
 
+class PrekiniPonavljanje(AST):
+    pass
+
 class NaredbaUslov(AST):
         def __init__(self, pitanje, da, ne):
                 self.pitanje = pitanje
@@ -55,13 +58,17 @@ class CelinaCelina(AST):
         def __init__(self, cvorovi):
                 self.cvorovi = cvorovi
 
+class TipPodatka(AST):
+        def __init__(self, tip):
+                self.tip = tip
+
 class CeoBroj(AST):
         def __init__(self, broj):
                 self.broj = broj
 
-class TipPodatka(AST):
-        def __init__(self, tip):
-                self.tip = tip
+class JesteNije(AST):
+        def __init__(self, jestenije):
+                self.jestenije = jestenije
 
 class Struna(AST):
         def __init__(self, struna):
@@ -70,6 +77,11 @@ class Struna(AST):
 class Naziv(AST):
         def __init__(self, naziv):
                 self.naziv = naziv
+
+class ElementNiza(AST):
+        def __init__(self, naziv, indeksi):
+                self.naziv = naziv
+                self.indeksi = indeksi
 
 class BinarnaOperacija(AST):
         def __init__(self, prvi, simbol, drugi):
@@ -80,4 +92,4 @@ class BinarnaOperacija(AST):
 class UnarnaOperacija(AST):
         def __init__(self, simbol, prvi):
                 self.simbol = simbol
-                self.prvi = node
+                self.prvi = prvi

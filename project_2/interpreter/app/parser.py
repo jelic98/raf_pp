@@ -28,6 +28,17 @@ class Parser():
                         self.current_token = self.lexer.get_next_token()
                 else:
                         self.type_error(token_type, self.current_token.token_type)
+
+        def jump(self, start, end):
+            depth = 0
+            while self.current_token.token_type != EOF:
+                    if self.current_token.token_type == start:
+                        depth += 1
+                    elif self.current_token.token_type == end:
+                        depth -= 1
+                        if depth < 0:
+                            break
+                    self.eat(self.current_token.token_type)
         
         def program(self):
                 cvorovi = []
@@ -93,8 +104,7 @@ class Parser():
                         self.celina_ponovi()
                 if self.is_celina_pitanje():
                         self.celina_pitanje()
-                while self.current_token.token_type != NAREDBA_KRAJ:
-                        self.eat(self.current_token.token_type)
+                self.jump(NAREDBA_POCETAK, NAREDBA_KRAJ)
                 self.eat(NAREDBA_KRAJ)
                 self.eat(COLON)
                 return self.current_token.token_type == NAREDBA_PONAVLJANJE
@@ -103,8 +113,7 @@ class Parser():
                 self.eat(NAREDBA_POCETAK)
                 ponovi = self.celina_ponovi()
                 pitanje = self.celina_pitanje()
-                while self.current_token.token_type != NAREDBA_KRAJ:
-                        self.eat(self.current_token.token_type)
+                self.jump(NAREDBA_POCETAK, NAREDBA_KRAJ)
                 self.eat(NAREDBA_KRAJ)
                 self.eat(COLON)
                 self.eat(NAREDBA_PONAVLJANJE)
@@ -115,7 +124,7 @@ class Parser():
                 self.eat(PIPE)
                 izraz = self.logic()
                 self.eat(PIPE)
-                varijabla = self.naziv()
+                varijabla = self.varijabla()
                 self.eat(DODELA_KRAJ)
                 return Dodela(izraz, varijabla)
 
@@ -140,8 +149,7 @@ class Parser():
         @restorable
         def is_celina_pitanje(self):
                 self.eat(CELINA_POCETAK)
-                while self.current_token.token_type != CELINA_KRAJ:
-                    self.eat(self.current_token.token_type)
+                self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 return self.current_token.token_type == CELINA_PITANJE
@@ -149,6 +157,7 @@ class Parser():
         def celina_pitanje(self):
                 self.eat(CELINA_POCETAK)
                 izraz = self.logic()
+                self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_PITANJE)
@@ -157,8 +166,7 @@ class Parser():
         @restorable
         def is_celina_da(self):
                 self.eat(CELINA_POCETAK)
-                while self.current_token.token_type != CELINA_KRAJ:
-                    self.eat(self.current_token.token_type)
+                self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 return self.current_token.token_type == CELINA_DA
@@ -166,6 +174,7 @@ class Parser():
         def celina_da(self):
                 self.eat(CELINA_POCETAK)
                 celina = self.celina_celina()
+                self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_DA)
@@ -174,8 +183,7 @@ class Parser():
         @restorable
         def is_celina_ne(self):
                 self.eat(CELINA_POCETAK)
-                while self.current_token.token_type != CELINA_KRAJ:
-                    self.eat(self.current_token.token_type)
+                self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 return self.current_token.token_type == CELINA_NE
@@ -183,6 +191,7 @@ class Parser():
         def celina_ne(self):
                 self.eat(CELINA_POCETAK)
                 celina = self.celina_celina()
+                self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_NE)
@@ -191,8 +200,7 @@ class Parser():
         @restorable
         def is_celina_ponovi(self):
                 self.eat(CELINA_POCETAK)
-                while self.current_token.token_type != CELINA_KRAJ:
-                    self.eat(self.current_token.token_type)
+                self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 return self.current_token.token_type == CELINA_PONOVI
@@ -200,6 +208,7 @@ class Parser():
         def celina_ponovi(self):
                 self.eat(CELINA_POCETAK)
                 celina = self.celina_celina()
+                self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_PONOVI)
@@ -208,6 +217,7 @@ class Parser():
         def celina_polje(self):
                 self.eat(CELINA_POCETAK)
                 polja = self.polje()
+                self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_POLJE)
@@ -216,6 +226,7 @@ class Parser():
         def celina_sadrzaj_rutine(self):
                 self.eat(CELINA_POCETAK)
                 celina = self.celina_celina()
+                self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_SADRZAJ_RUTINE)
@@ -236,21 +247,11 @@ class Parser():
                                 cvorovi.append(self.ugradjena_rutina_poziv())
                         elif self.current_token.token_type == VRATI_POCETAK:
                                 cvorovi.append(self.vrati())
+                        elif self.current_token.token_type == PREKINI_PONAVLJANJE:
+                                cvorovi.append(self.prekini_ponavljanje())
                         else:
                             self.error('Derivation error: CELINA_CELINA')
                 return CelinaCelina(cvorovi)
-
-        def jump(self, start, end):
-            depth = 0
-            while self.current_token.token_type != EOF:
-                    if self.current_token.token_type == start:
-                        depth += 1
-                    elif self.current_token.token_type == end:
-                        depth -= 1
-                        if depth < 0:
-                            break
-                    self.eat(self.current_token.token_type)
-
 
         def rutina(self):
             self.eat(RUTINA_POCETAK)
@@ -302,6 +303,10 @@ class Parser():
                 self.eat(VRATI_KRAJ)
                 return Vrati(izraz)
 
+        def prekini_ponavljanje(self):
+                self.eat(PREKINI_PONAVLJANJE)
+                return PrekiniPonavljanje()
+
         def tip_podatka(self):
                 if self.current_token.token_type == TIP_PODATKA:
                         tip = TipPodatka(self.current_token.value)
@@ -318,17 +323,32 @@ class Parser():
                 else:
                     self.error('Derivation error: NAZIV')
 
+        def varijabla(self):
+                if self.current_token.token_type == NAZIV:
+                        naziv = Naziv(self.current_token.value)
+                        self.eat(NAZIV)
+                        if self.current_token.token_type == COLON:
+                            indeksi = []
+                            while self.current_token.token_type == COLON:
+                                self.eat(COLON)
+                                indeksi.append(self.expr())
+                            return ElementNiza(naziv, indeksi)
+                        else:
+                                return naziv
+
         def factor(self):
                 token = self.current_token
                 if token.token_type == CEO_BROJ:
                         self.eat(CEO_BROJ)
                         return CeoBroj(token.value)
-                elif token.token_type == NAZIV:
-                        self.eat(NAZIV)
-                        return Naziv(token.value)
                 elif token.token_type == STRUNA:
                         self.eat(STRUNA)
-                        return Naziv(token.value)
+                        return Struna(token.value)
+                elif token.token_type == JESTE_NIJE:
+                        self.eat(JESTE_NIJE)
+                        return JesteNije(token.value)
+                elif token.token_type == NAZIV:
+                        return self.varijabla()
                 elif token.token_type in [MINUS, LOGICKO_NE]:
                         op_token = self.current_token
                         if op_token.token_type == MINUS:
