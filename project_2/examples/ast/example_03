@@ -6,7 +6,7 @@ digraph {
 	node2 [label=RUTINA]
 	node3 [label="~ceo_broj"]
 	node2 -> node3
-	node4 [label=CELINA]
+	node4 [label=CELINA_SADRZAJ_RUTINE]
 	node5 [label=POSTOJANJE]
 	node6 [label="~ceo_broj"]
 	node5 -> node6
@@ -38,7 +38,7 @@ digraph {
 	node20 [label=n]
 	node18 -> node20
 	node17 -> node18
-	node21 [label=CELINA]
+	node21 [label=CELINA_PONOVI]
 	node22 [label=DODELA]
 	node23 [label="+"]
 	node24 [label=rezultat]
@@ -72,7 +72,7 @@ digraph {
 	node35 [label=RUTINA]
 	node36 [label="~ceo_broj"]
 	node35 -> node36
-	node37 [label=CELINA]
+	node37 [label=CELINA_SADRZAJ_RUTINE]
 	node38 [label=POSTOJANJE]
 	node39 [label="~ceo_broj"]
 	node38 -> node39
@@ -104,7 +104,7 @@ digraph {
 	node53 [label=n]
 	node51 -> node53
 	node50 -> node51
-	node54 [label=CELINA]
+	node54 [label=CELINA_PONOVI]
 	node55 [label=DODELA]
 	node56 [label="*"]
 	node57 [label=rezultat]
@@ -143,82 +143,96 @@ digraph {
 	node1 -> node68
 	node71 [label=DODELA]
 	node72 [label=UGRADJENA_RUTINA_POZIV]
-	node73 [label=ucitaj]
+	node73 [label=ARGUMENTI]
 	node72 -> node73
+	node74 [label=ucitaj]
+	node72 -> node74
 	node71 -> node72
-	node74 [label=n]
-	node71 -> node74
+	node75 [label=n]
+	node71 -> node75
 	node1 -> node71
-	node75 [label=POSTOJANJE]
-	node76 [label="~struna"]
-	node75 -> node76
-	node77 [label=opcija]
-	node75 -> node77
-	node1 -> node75
-	node78 [label=DODELA]
-	node79 [label=UGRADJENA_RUTINA_POZIV]
-	node80 [label=ucitaj]
+	node76 [label=POSTOJANJE]
+	node77 [label="~struna"]
+	node76 -> node77
+	node78 [label=opcija]
+	node76 -> node78
+	node1 -> node76
+	node79 [label=DODELA]
+	node80 [label=UGRADJENA_RUTINA_POZIV]
+	node81 [label=ARGUMENTI]
+	node80 -> node81
+	node82 [label=ucitaj]
+	node80 -> node82
 	node79 -> node80
-	node78 -> node79
-	node81 [label=opcija]
-	node78 -> node81
-	node1 -> node78
-	node82 [label=NAREDBA_USLOV]
-	node83 [label=LOGICKO_ILI]
-	node84 [label="="]
-	node85 [label=opcija]
+	node83 [label=opcija]
+	node79 -> node83
+	node1 -> node79
+	node84 [label=NAREDBA_USLOV]
+	node85 [label=LOGICKO_ILI]
+	node86 [label="="]
+	node87 [label=opcija]
+	node86 -> node87
+	node88 [label="\"zbir\""]
+	node86 -> node88
+	node85 -> node86
+	node89 [label="="]
+	node90 [label=opcija]
+	node89 -> node90
+	node91 [label="\"proizvod\""]
+	node89 -> node91
+	node85 -> node89
 	node84 -> node85
-	node86 [label=zbir]
-	node84 -> node86
-	node83 -> node84
-	node87 [label="="]
-	node88 [label=opcija]
-	node87 -> node88
-	node89 [label=proizvod]
-	node87 -> node89
-	node83 -> node87
-	node82 -> node83
-	node90 [label=CELINA]
-	node91 [label=NAREDBA_USLOV]
-	node92 [label="="]
-	node93 [label=opcija]
-	node92 -> node93
-	node94 [label=zbir]
-	node92 -> node94
-	node91 -> node92
-	node95 [label=CELINA]
-	node96 [label=UGRADJENA_RUTINA_POZIV]
-	node97 [label=RUTINA_POZIV]
-	node98 [label=n]
-	node97 -> node98
-	node99 [label=izracunaj_zbir]
-	node97 -> node99
-	node96 -> node97
-	node100 [label=ispisi]
-	node96 -> node100
-	node95 -> node96
-	node91 -> node95
-	node101 [label=CELINA]
-	node102 [label=UGRADJENA_RUTINA_POZIV]
-	node103 [label=RUTINA_POZIV]
-	node104 [label=n]
-	node103 -> node104
-	node105 [label=izracunaj_proizvod]
-	node103 -> node105
-	node102 -> node103
-	node106 [label=ispisi]
-	node102 -> node106
+	node92 [label=CELINA_DA]
+	node93 [label=NAREDBA_USLOV]
+	node94 [label="="]
+	node95 [label=opcija]
+	node94 -> node95
+	node96 [label="\"zbir\""]
+	node94 -> node96
+	node93 -> node94
+	node97 [label=CELINA_DA]
+	node98 [label=UGRADJENA_RUTINA_POZIV]
+	node99 [label=ARGUMENTI]
+	node100 [label=RUTINA_POZIV]
+	node101 [label=ARGUMENTI]
+	node102 [label=n]
 	node101 -> node102
-	node91 -> node101
-	node90 -> node91
-	node82 -> node90
-	node107 [label=CELINA]
-	node108 [label=UGRADJENA_RUTINA_POZIV]
-	node109 [label="Uneta opcija nije validna"]
+	node100 -> node101
+	node103 [label=izracunaj_zbir]
+	node100 -> node103
+	node99 -> node100
+	node98 -> node99
+	node104 [label=ispisi]
+	node98 -> node104
+	node97 -> node98
+	node93 -> node97
+	node105 [label=CELINA_NE]
+	node106 [label=UGRADJENA_RUTINA_POZIV]
+	node107 [label=ARGUMENTI]
+	node108 [label=RUTINA_POZIV]
+	node109 [label=ARGUMENTI]
+	node110 [label=n]
+	node109 -> node110
 	node108 -> node109
-	node110 [label=ispisi]
-	node108 -> node110
+	node111 [label=izracunaj_proizvod]
+	node108 -> node111
 	node107 -> node108
-	node82 -> node107
-	node1 -> node82
+	node106 -> node107
+	node112 [label=ispisi]
+	node106 -> node112
+	node105 -> node106
+	node93 -> node105
+	node92 -> node93
+	node84 -> node92
+	node113 [label=CELINA_NE]
+	node114 [label=UGRADJENA_RUTINA_POZIV]
+	node115 [label=ARGUMENTI]
+	node116 [label="\"Uneta opcija nije validna\""]
+	node115 -> node116
+	node114 -> node115
+	node117 [label=ispisi]
+	node114 -> node117
+	node113 -> node114
+	node84 -> node113
+	node1 -> node84
 }
