@@ -51,10 +51,7 @@ class Executor(NodeVisitor):
         
         def visit_Postojanje(self, node):
                 naziv = self.visit(node.naziv)
-                if len(call_stack) == 0:
-                    vars[naziv] = Var(node.tip, naziv)
-                else:
-                    call_stack[-1].vars[naziv] = Var(node.tip, naziv)
+                self.add_var(node.tip, naziv)
 
         def visit_Dodela(self, node):
                 izraz = self.visit(node.izraz)
@@ -130,13 +127,13 @@ class Executor(NodeVisitor):
                         self.visit(node.ne)
 
         def visit_NaredbaPonavljanje(self, node):
-                pitanje = True
+                pitanje = self.visit(node.pitanje)
                 while pitanje:
-                    pitanje = self.visit(node.pitanje)
                     for cvor in node.ponovi.cvorovi:
                         self.visit(cvor)
                         if isinstance(node, PrekiniPonavljanje):
                             return
+                    pitanje = self.visit(node.pitanje)
 
         def visit_CelinaCelina(self, node):
                 for cvor in node.cvorovi:
@@ -161,20 +158,31 @@ class Executor(NodeVisitor):
                 return node.naziv
 
         def visit_ElementNiza(self, node):
-                self.visit(node.naziv)
+                niz = self.visit(node.naziv)
+                naziv = niz
+                naziv += ":"
+                i = 0
                 for indeks in node.indeksi:
+                        i += 1
+                        if i > 1:
+                                naziv += ","
                         if indeks is not None:
-                                self.visit(indeks)
+                                if isinstance(indeks, Naziv):
+                                        naziv += str(self.get_var(indeks.naziv).vrednost)
+                                else:
+                                    naziv += self.visit(indeks)
+                self.add_var(self.get_var(niz).tip, naziv)
+                return naziv
 
         def visit_BinarnaOperacija(self, node):
                 prvi = self.visit(node.prvi)
                 drugi = self.visit(node.drugi)
              
-                if isinstance(node.prvi, Naziv):
-                    prvi = self.get_var(prvi)
+                if isinstance(node.prvi, Naziv) or isinstance(node.prvi, ElementNiza):
+                    prvi = self.get_var(prvi).vrednost
 
-                if isinstance(node.drugi, Naziv):
-                    drugi = self.get_var(drugi)
+                if isinstance(node.drugi, Naziv) or isinstance(node.drugi, ElementNiza):
+                    drugi = self.get_var(drugi).vrednost
 
                 if node.simbol == '+':
                     return int(prvi) + int(drugi)
@@ -212,8 +220,8 @@ class Executor(NodeVisitor):
         def visit_UnarnaOperacija(self, node):
                 prvi = self.visit(node.prvi)
 
-                if isinstance(node.prvi, Naziv):
-                    prvi = self.get_var(prvi)
+                if isinstance(node.prvi, Naziv) or isinstance(node.prvi, ElementNiza):
+                    prvi = self.get_var(prvi).vrednost
 
                 if node.simbol == '-':
                     return -prvi
@@ -221,11 +229,17 @@ class Executor(NodeVisitor):
                     return not prvi
                 return None
 
+        def add_var(self, tip, naziv):
+            if len(call_stack) == 0 and naziv not in vars:
+                vars[naziv] = Var(tip, naziv)
+            elif len(call_stack) > 0 and naziv not in call_stack[-1].vars:
+                call_stack[-1].vars[naziv] = Var(tip, naziv)
+
         def get_var(self, naziv):
             if len(call_stack) == 0:
-                return vars[naziv].vrednost
+                return vars[naziv]
             else:
-                return call_stack[-1].vars[naziv].vrednost
+                return call_stack[-1].vars[naziv]
 
         def set_var(self, naziv, vrednost):
             if len(call_stack) == 0:
