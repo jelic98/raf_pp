@@ -1,8 +1,14 @@
+from app.type import *
 from app.nodes import *
 
 vars = {}
 funs = {}
 call_stack = []
+types = {
+    CEO_BROJ: "~ceo_broj",
+    STRUNA: "~struna",
+    JESTE_NIJE: "~jeste_nije"
+}
 
 class Var:
     def __init__(self, tip, naziv):
@@ -34,7 +40,7 @@ class Executor(NodeVisitor):
                 for cvor in node.cvorovi:
                     if isinstance(cvor, Postojanje):
                         self.visit(cvor)
-                
+             
                 for cvor in node.cvorovi:
                     if isinstance(cvor, Dodela):
                         self.visit(cvor)
@@ -50,13 +56,15 @@ class Executor(NodeVisitor):
                         self.visit(cvor)
         
         def visit_Postojanje(self, node):
-                naziv = self.visit(node.naziv)
-                self.add_var(node.tip, naziv)
+                self.add_var(node.tip, node.naziv.naziv)
 
         def visit_Dodela(self, node):
                 izraz = self.visit(node.izraz)
-                varijabla = self.visit(node.varijabla)
-                self.set_var(varijabla, izraz)
+                varijabla = node.varijabla
+                if isinstance(varijabla, Naziv):
+                    self.set_var(izraz, varijabla.naziv)
+                elif isinstance(varijabla, ElementNiza):
+                    self.set_var(izraz, varijabla.naziv.naziv, varijabla.indeksi)
 
         def visit_Polje(self, node):
                 tip = self.visit(node.tip)
@@ -66,23 +74,25 @@ class Executor(NodeVisitor):
                 tip = None
                 if node.tip is not None:
                     tip = self.visit(node.tip)
-                naziv = self.visit(node.naziv)
+                naziv = node.naziv.naziv
                 vars = {}
                 for polje in node.polja.cvorovi:
-                    polje_naziv = self.visit(polje.naziv)
+                    polje_naziv = polje.naziv.naziv
                     vars[polje_naziv] = Var(polje.tip, polje_naziv)
                 funs[naziv] = Fun(tip, naziv, vars, node.sadrzaj)
         
         def visit_Argumenti(self, node):
-                argumenti = []
-                for arg in node.argumenti:
-                        if arg is not None:
-                                argumenti.append(self.visit(arg))
-                return argumenti
+            argumenti = []
+            for arg in node.argumenti:
+                if isinstance(arg, Naziv):
+                    argumenti.append(arg.naziv)
+                else:
+                    argumenti.append(self.visit(arg))
+            return argumenti
 
         def visit_RutinaPoziv(self, node):
                 argumenti = self.visit(node.argumenti)
-                naziv = self.visit(node.naziv)
+                naziv = node.naziv.naziv
                 for arg in argumenti:
                     funs[naziv].vars[arg].vrednost = vars[arg].vrednost
                 call_stack.append(funs[naziv])
@@ -94,7 +104,7 @@ class Executor(NodeVisitor):
 
         def visit_UgradjenaRutinaPoziv(self, node):
                 argumenti = self.visit(node.argumenti)
-                naziv = self.visit(node.naziv)
+                naziv = node.naziv.naziv
                 if naziv == "ucitaj":
                     return input()
                 elif naziv == "ispisi":
@@ -110,9 +120,9 @@ class Executor(NodeVisitor):
                 return None
 
         def visit_Vrati(self, node):
-                izraz = self.visit(node.izraz)
-                if isinstance(node.izraz, Naziv):
-                    izraz = call_stack[-1].vars[izraz].vrednost
+                izraz = node.izraz
+                if isinstance(izraz, Naziv):
+                    izraz = call_stack[-1].vars[izraz.naziv].vrednost
                 return izraz
 
         def visit_PrekiniPonavljanje(self, node):
@@ -155,35 +165,22 @@ class Executor(NodeVisitor):
                 return node.tip
 
         def visit_Naziv(self, node):
-                return node.naziv
+                return self.get_var(node.naziv).vrednost
 
         def visit_ElementNiza(self, node):
-                niz = self.visit(node.naziv)
-                naziv = niz
-                naziv += ":"
-                i = 0
+                vrednost = self.visit(node.naziv)
                 for indeks in node.indeksi:
-                        i += 1
-                        if i > 1:
-                                naziv += ","
                         if indeks is not None:
                                 if isinstance(indeks, Naziv):
-                                        naziv += str(self.get_var(indeks.naziv).vrednost)
+                                        indeks = int(self.get_var(indeks.naziv).vrednost)
                                 else:
-                                    naziv += self.visit(indeks)
-                self.add_var(self.get_var(niz).tip, naziv)
-                return naziv
+                                        indeks = int(self.visit(indeks))
+                                vrednost = vrednost[indeks]
+                return vrednost
 
         def visit_BinarnaOperacija(self, node):
                 prvi = self.visit(node.prvi)
                 drugi = self.visit(node.drugi)
-             
-                if isinstance(node.prvi, Naziv) or isinstance(node.prvi, ElementNiza):
-                    prvi = self.get_var(prvi).vrednost
-
-                if isinstance(node.drugi, Naziv) or isinstance(node.drugi, ElementNiza):
-                    drugi = self.get_var(drugi).vrednost
-
                 if node.simbol == '+':
                     return int(prvi) + int(drugi)
                 elif node.simbol == '-':
@@ -219,10 +216,6 @@ class Executor(NodeVisitor):
 
         def visit_UnarnaOperacija(self, node):
                 prvi = self.visit(node.prvi)
-
-                if isinstance(node.prvi, Naziv) or isinstance(node.prvi, ElementNiza):
-                    prvi = self.get_var(prvi).vrednost
-
                 if node.simbol == '-':
                     return -prvi
                 elif node.simbol == '!':
@@ -230,31 +223,56 @@ class Executor(NodeVisitor):
                 return None
 
         def add_var(self, tip, naziv):
-            if len(call_stack) == 0 and naziv not in vars:
-                vars[naziv] = Var(tip, naziv)
-            elif len(call_stack) > 0 and naziv not in call_stack[-1].vars:
+            if len(call_stack) > 0 and naziv not in call_stack[-1].vars:
                 call_stack[-1].vars[naziv] = Var(tip, naziv)
+            elif len(call_stack) == 0 and naziv not in vars:
+                vars[naziv] = Var(tip, naziv)
+                if tip.tip == types[STRUNA]:
+                    self.set_var([], naziv)
 
         def get_var(self, naziv):
-            if len(call_stack) == 0:
-                return vars[naziv]
-            else:
+            if len(call_stack) > 0 and naziv in call_stack[-1].vars:
                 return call_stack[-1].vars[naziv]
-
-        def set_var(self, naziv, vrednost):
-            if len(call_stack) == 0:
-                vars[naziv].vrednost = vrednost
             else:
-                call_stack[-1].vars[naziv].vrednost = vrednost
+                return vars[naziv]
+
+        def set_var(self, vrednost, naziv, indeksi=None):
+            if len(call_stack) > 0 and naziv in call_stack[-1].vars:
+                if indeksi is None:
+                    call_stack[-1].vars[naziv].vrednost = vrednost
+                else:
+                    self.set_arr_var(vrednost, call_stack[-1].vars[naziv].vrednost, indeksi)
+            else:
+                if indeksi is None:
+                    vars[naziv].vrednost = vrednost
+                else:
+                    self.set_arr_var(vrednost, vars[naziv].vrednost, indeksi)
+
+        def set_arr_var(self, nova, niz, indeksi):
+            prev_vrednost = None
+            prev_indeks = None
+            vrednost = niz
+            for indeks in indeksi:
+                if indeks is not None:
+                    if isinstance(indeks, Naziv):
+                        indeks = int(self.get_var(indeks.naziv).vrednost)
+                    else:
+                        indeks = int(self.visit(indeks))
+                if indeks >= len(vrednost):
+                    vrednost.append(None)
+                prev_vrednost = vrednost
+                prev_indeks = indeks
+                vrednost = vrednost[indeks]
+            prev_vrednost[prev_indeks] = nova
 
         def log_vars(self):
             print("*** GLOBAL SCOPE ***")
             for (naziv, var) in vars.items():
-                print("{} {}={}".format(var.tip.tip, var.naziv, var.vrednost))
+                print("{}->{} {}={}".format(naziv, var.tip.tip, var.naziv, var.vrednost))
             print("*** CALL STACK *** ")
             for fun in call_stack:
                 for (naziv, var) in fun.vars.items():
-                    print("{} {}={}".format(var.tip.tip, var.naziv, var.vrednost))
+                    print("{}->{} {}={}".format(naziv, var.tip.tip, var.naziv, var.vrednost))
             print("---------- * ----------")
 
         def execute(self):
