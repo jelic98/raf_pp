@@ -97,10 +97,7 @@ class Executor(NodeVisitor):
         def visit_Argumenti(self, node):
             args = []
             for arg in node.argumenti:
-                if isinstance(arg, Naziv):
-                    args.append(arg.naziv)
-                else:
-                    args.append(self.visit(arg))
+                args.append(self.visit(arg))
             return args
 
         def visit_RutinaPoziv(self, node):
@@ -108,7 +105,7 @@ class Executor(NodeVisitor):
                 naziv = node.naziv.naziv
                 i = 0;
                 for arg in argumenti:
-                    funs[naziv].vars[funs[naziv].args[i]].vrednost = vars[arg].vrednost
+                    funs[naziv].vars[funs[naziv].args[i]].vrednost = arg
                     i += 1
                 call_stack.append(funs[naziv])
                 vrednost = self.visit(funs[naziv].sadrzaj)
@@ -123,7 +120,7 @@ class Executor(NodeVisitor):
                 if naziv == "ucitaj":
                     return input()
                 elif naziv == "ispisi":
-                    print(argumenti[0])
+                    print(argumenti[0], end="")
                 elif naziv == "spoji_strune":
                     s = ""
                     for arg in node.argumenti.argumenti:
@@ -138,7 +135,7 @@ class Executor(NodeVisitor):
                             s += str(self.visit(arg))
                     return s
                 elif naziv == "duzina_strune": 
-                    return len(self.get_var(argumenti[0]).vrednost)
+                    return len(argumenti[0])
                 return None
 
         def visit_Vrati(self, node):
