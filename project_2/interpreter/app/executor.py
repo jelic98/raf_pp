@@ -17,10 +17,11 @@ class Var:
         self.vrednost = None
 
 class Fun:
-    def __init__(self, tip, naziv, vars, sadrzaj):
+    def __init__(self, tip, naziv, vars, args, sadrzaj):
         self.tip = tip
         self.naziv = naziv
         self.vars = vars
+        self.args = args
         self.sadrzaj = sadrzaj
 
 class NodeVisitor(object):
@@ -48,7 +49,7 @@ class Executor(NodeVisitor):
                 for cvor in node.cvorovi:
                     if isinstance(cvor, Rutina):
                         self.visit(cvor)
-            
+        
                 for cvor in node.cvorovi:
                     if(not isinstance(cvor, Postojanje)
                         and not isinstance(cvor, Dodela)
@@ -62,13 +63,23 @@ class Executor(NodeVisitor):
                 izraz = self.visit(node.izraz)
                 varijabla = node.varijabla
                 if isinstance(varijabla, Naziv):
-                    self.set_var(izraz, varijabla.naziv)
+                    var = self.get_var(varijabla.naziv)
+                    if var.tip.tip == types[STRUNA]:
+                        tokens = izraz.split(" ")
+                        if len(tokens) == 1:
+                            self.set_var(tokens[0], varijabla.naziv)
+                        else:
+                            i = 0
+                            for token in tokens:
+                                self.set_var(token, varijabla.naziv, [i])
+                                i += 1
+                    else:
+                        self.set_var(izraz, varijabla.naziv)
                 elif isinstance(varijabla, ElementNiza):
                     self.set_var(izraz, varijabla.naziv.naziv, varijabla.indeksi)
 
         def visit_Polje(self, node):
-                tip = self.visit(node.tip)
-                naziv = self.visit(node.naziv)
+            pass
 
         def visit_Rutina(self, node):
                 tip = None
@@ -76,30 +87,34 @@ class Executor(NodeVisitor):
                     tip = self.visit(node.tip)
                 naziv = node.naziv.naziv
                 vars = {}
+                args = []
                 for polje in node.polja.cvorovi:
                     polje_naziv = polje.naziv.naziv
                     vars[polje_naziv] = Var(polje.tip, polje_naziv)
-                funs[naziv] = Fun(tip, naziv, vars, node.sadrzaj)
+                    args.append(polje_naziv)
+                funs[naziv] = Fun(tip, naziv, vars, args, node.sadrzaj)
         
         def visit_Argumenti(self, node):
-            argumenti = []
+            args = []
             for arg in node.argumenti:
                 if isinstance(arg, Naziv):
-                    argumenti.append(arg.naziv)
+                    args.append(arg.naziv)
                 else:
-                    argumenti.append(self.visit(arg))
-            return argumenti
+                    args.append(self.visit(arg))
+            return args
 
         def visit_RutinaPoziv(self, node):
                 argumenti = self.visit(node.argumenti)
                 naziv = node.naziv.naziv
+                i = 0;
                 for arg in argumenti:
-                    funs[naziv].vars[arg].vrednost = vars[arg].vrednost
+                    funs[naziv].vars[funs[naziv].args[i]].vrednost = vars[arg].vrednost
+                    i += 1
                 call_stack.append(funs[naziv])
                 vrednost = self.visit(funs[naziv].sadrzaj)
                 call_stack.pop()
-                for arg in argumenti:
-                    funs[naziv].vars[arg].vrednost = None
+                for (naziv_var, var) in funs[naziv].vars.items():
+                    funs[naziv].vars[naziv_var].vrednost = None
                 return vrednost
 
         def visit_UgradjenaRutinaPoziv(self, node):
@@ -113,10 +128,17 @@ class Executor(NodeVisitor):
                     s = ""
                     for arg in node.argumenti.argumenti:
                         if isinstance(arg, Naziv):
-                            s += str(vars[arg.naziv].vrednost)
+                            vrednost = vars[arg.naziv].vrednost
+                            if self.get_var(arg.naziv).tip.tip == types[STRUNA]:
+                                for v in vrednost:
+                                    s += str(v)
+                            else:
+                                s += str(vrednost)
                         else:
                             s += str(self.visit(arg))
                     return s
+                elif naziv == "duzina_strune": 
+                    return len(self.get_var(argumenti[0]).vrednost)
                 return None
 
         def visit_Vrati(self, node):
@@ -173,8 +195,10 @@ class Executor(NodeVisitor):
                         if indeks is not None:
                                 if isinstance(indeks, Naziv):
                                         indeks = int(self.get_var(indeks.naziv).vrednost)
-                                else:
+                                elif isinstance(indeks, AST):
                                         indeks = int(self.visit(indeks))
+                                else:
+                                        indeks = int(indeks)
                                 vrednost = vrednost[indeks]
                 return vrednost
 
@@ -256,8 +280,10 @@ class Executor(NodeVisitor):
                 if indeks is not None:
                     if isinstance(indeks, Naziv):
                         indeks = int(self.get_var(indeks.naziv).vrednost)
-                    else:
+                    elif isinstance(indeks, AST):
                         indeks = int(self.visit(indeks))
+                    else:
+                        indeks = int(indeks)
                 if indeks >= len(vrednost):
                     vrednost.append(None)
                 prev_vrednost = vrednost
