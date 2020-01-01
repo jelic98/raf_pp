@@ -53,7 +53,7 @@
 		##celina:sadrzaj_rutine
 		#celina
 			#polje | ~ceo_broj | n ##polje
-		#celina:polja
+		##celina:polja
 	##rutina:izracunaj_proizvod
 	
 	#postojanje | ~ceo_broj | n ##postojanje

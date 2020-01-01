@@ -25,10 +25,11 @@ class Argumenti(AST):
                 self.argumenti = argumenti
 
 class Rutina(AST):
-        def __init__(self, tip, sadrzaj, naziv):
+        def __init__(self, tip, naziv, polja, sadrzaj):
                 self.tip = tip
-                self.sadrzaj = sadrzaj
                 self.naziv = naziv
+                self.polja = polja
+                self.sadrzaj = sadrzaj
 
 class RutinaPoziv(AST):
         def __init__(self, argumenti, naziv):

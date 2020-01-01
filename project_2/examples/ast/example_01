@@ -24,31 +24,33 @@ digraph {
 	node12 [label="%"]
 	node13 [label=n]
 	node12 -> node13
-	node14 [label=2]
+	node14 [label="-"]
+	node15 [label=2]
+	node14 -> node15
 	node12 -> node14
 	node11 -> node12
-	node15 [label=0]
-	node11 -> node15
+	node16 [label=0]
+	node11 -> node16
 	node10 -> node11
-	node16 [label=CELINA_DA]
-	node17 [label=UGRADJENA_RUTINA_POZIV]
-	node18 [label=ARGUMENTI]
-	node19 [label="\"Paran broj\""]
+	node17 [label=CELINA_DA]
+	node18 [label=UGRADJENA_RUTINA_POZIV]
+	node19 [label=ARGUMENTI]
+	node20 [label="\"Paran broj\""]
+	node19 -> node20
 	node18 -> node19
+	node21 [label=ispisi]
+	node18 -> node21
 	node17 -> node18
-	node20 [label=ispisi]
-	node17 -> node20
-	node16 -> node17
-	node10 -> node16
-	node21 [label=CELINA_NE]
-	node22 [label=UGRADJENA_RUTINA_POZIV]
-	node23 [label=ARGUMENTI]
-	node24 [label="\"Neparan broj\""]
+	node10 -> node17
+	node22 [label=CELINA_NE]
+	node23 [label=UGRADJENA_RUTINA_POZIV]
+	node24 [label=ARGUMENTI]
+	node25 [label="\"Neparan broj\""]
+	node24 -> node25
 	node23 -> node24
+	node26 [label=ispisi]
+	node23 -> node26
 	node22 -> node23
-	node25 [label=ispisi]
-	node22 -> node25
-	node21 -> node22
-	node10 -> node21
+	node10 -> node22
 	node1 -> node10
 }

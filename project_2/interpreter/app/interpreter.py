@@ -75,6 +75,9 @@ class Interpreter(NodeVisitor):
                 self.visit(node.sadrzaj)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.sadrzaj._num))
 
+                self.visit(node.polja)
+                self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.polja._num))
+
                 self.visit(node.naziv)
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.naziv._num))
 
@@ -150,7 +153,7 @@ class Interpreter(NodeVisitor):
                 self.dot.edge('node{}'.format(node._num), 'node{}'.format(node.ponovi._num))
 
         def visit_CelinaCelina(self, node):
-                self.dot.node('node{}'.format(self.ncount), 'CELINA_' + node.tip)
+                self.dot.node('node{}'.format(self.ncount), node.tip)
                 node._num = self.ncount
                 self.ncount += 1
 

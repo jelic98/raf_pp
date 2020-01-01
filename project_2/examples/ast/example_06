@@ -94,521 +94,563 @@ digraph {
 	node46 -> node47
 	node4 -> node46
 	node2 -> node4
-	node48 [label=duzina_najduze_reci]
-	node2 -> node48
-	node1 -> node2
-	node49 [label=RUTINA]
+	node48 [label=CELINA_POLJA]
+	node49 [label=POLJE]
 	node50 [label="~struna"]
 	node49 -> node50
-	node51 [label=CELINA_SADRZAJ_RUTINE]
-	node52 [label=POSTOJANJE]
-	node53 [label="~struna"]
-	node52 -> node53
-	node54 [label=zvezdice]
-	node52 -> node54
-	node51 -> node52
-	node55 [label=POSTOJANJE]
-	node56 [label="~ceo_broj"]
-	node55 -> node56
-	node57 [label=i]
-	node55 -> node57
-	node51 -> node55
-	node58 [label=DODELA]
-	node59 [label=0]
-	node58 -> node59
-	node60 [label=i]
-	node58 -> node60
-	node51 -> node58
-	node61 [label=NAREDBA_PONAVLJANJE]
-	node62 [label="<"]
-	node63 [label=i]
-	node62 -> node63
-	node64 [label="+"]
-	node65 [label=max_duzina]
-	node64 -> node65
-	node66 [label=4]
-	node64 -> node66
-	node62 -> node64
-	node61 -> node62
-	node67 [label=CELINA_PONOVI]
-	node68 [label=DODELA]
-	node69 [label="\"*\""]
-	node68 -> node69
-	node70 [label=ELEMENT_NIZA]
-	node71 [label=zvezdice]
-	node70 -> node71
-	node72 [label=i]
-	node70 -> node72
-	node68 -> node70
-	node67 -> node68
-	node73 [label=DODELA]
-	node74 [label="+"]
-	node75 [label=i]
-	node74 -> node75
-	node76 [label=1]
-	node74 -> node76
-	node73 -> node74
-	node77 [label=i]
-	node73 -> node77
-	node67 -> node73
-	node61 -> node67
-	node51 -> node61
-	node78 [label=VRATI]
-	node79 [label=zvezdice]
-	node78 -> node79
-	node51 -> node78
+	node51 [label=reci]
 	node49 -> node51
-	node80 [label=red_zvezdica]
-	node49 -> node80
-	node1 -> node49
-	node81 [label=RUTINA]
-	node82 [label=CELINA_SADRZAJ_RUTINE]
-	node83 [label=POSTOJANJE]
-	node84 [label="~ceo_broj"]
-	node83 -> node84
-	node85 [label=i]
-	node83 -> node85
-	node82 -> node83
-	node86 [label=DODELA]
-	node87 [label=0]
-	node86 -> node87
-	node88 [label=i]
-	node86 -> node88
-	node82 -> node86
-	node89 [label=POSTOJANJE]
-	node90 [label="~ceo_broj"]
-	node89 -> node90
-	node91 [label=j]
-	node89 -> node91
-	node82 -> node89
-	node92 [label=DODELA]
-	node93 [label=0]
-	node92 -> node93
-	node94 [label=j]
-	node92 -> node94
-	node82 -> node92
-	node95 [label=NAREDBA_PONAVLJANJE]
-	node96 [label="<"]
-	node97 [label=i]
-	node96 -> node97
-	node98 [label=broj_redova]
-	node96 -> node98
-	node95 -> node96
-	node99 [label=CELINA_PONOVI]
-	node100 [label=DODELA]
-	node101 [label=0]
+	node48 -> node49
+	node52 [label=POLJE]
+	node53 [label="~ceo_broj"]
+	node52 -> node53
+	node54 [label=broj_reci]
+	node52 -> node54
+	node48 -> node52
+	node2 -> node48
+	node55 [label=duzina_najduze_reci]
+	node2 -> node55
+	node1 -> node2
+	node56 [label=RUTINA]
+	node57 [label="~struna"]
+	node56 -> node57
+	node58 [label=CELINA_SADRZAJ_RUTINE]
+	node59 [label=POSTOJANJE]
+	node60 [label="~struna"]
+	node59 -> node60
+	node61 [label=zvezdice]
+	node59 -> node61
+	node58 -> node59
+	node62 [label=POSTOJANJE]
+	node63 [label="~ceo_broj"]
+	node62 -> node63
+	node64 [label=i]
+	node62 -> node64
+	node58 -> node62
+	node65 [label=DODELA]
+	node66 [label=0]
+	node65 -> node66
+	node67 [label=i]
+	node65 -> node67
+	node58 -> node65
+	node68 [label=NAREDBA_PONAVLJANJE]
+	node69 [label="<"]
+	node70 [label=i]
+	node69 -> node70
+	node71 [label="+"]
+	node72 [label=max_duzina]
+	node71 -> node72
+	node73 [label=4]
+	node71 -> node73
+	node69 -> node71
+	node68 -> node69
+	node74 [label=CELINA_PONOVI]
+	node75 [label=DODELA]
+	node76 [label="\"*\""]
+	node75 -> node76
+	node77 [label=ELEMENT_NIZA]
+	node78 [label=zvezdice]
+	node77 -> node78
+	node79 [label=i]
+	node77 -> node79
+	node75 -> node77
+	node74 -> node75
+	node80 [label=DODELA]
+	node81 [label="+"]
+	node82 [label=i]
+	node81 -> node82
+	node83 [label=1]
+	node81 -> node83
+	node80 -> node81
+	node84 [label=i]
+	node80 -> node84
+	node74 -> node80
+	node68 -> node74
+	node58 -> node68
+	node85 [label=VRATI]
+	node86 [label=zvezdice]
+	node85 -> node86
+	node58 -> node85
+	node56 -> node58
+	node87 [label=CELINA_POLJA]
+	node88 [label=POLJE]
+	node89 [label="~ceo_broj"]
+	node88 -> node89
+	node90 [label=max_duzina]
+	node88 -> node90
+	node87 -> node88
+	node56 -> node87
+	node91 [label=red_zvezdica]
+	node56 -> node91
+	node1 -> node56
+	node92 [label=RUTINA]
+	node93 [label=CELINA_SADRZAJ_RUTINE]
+	node94 [label=POSTOJANJE]
+	node95 [label="~ceo_broj"]
+	node94 -> node95
+	node96 [label=i]
+	node94 -> node96
+	node93 -> node94
+	node97 [label=DODELA]
+	node98 [label=0]
+	node97 -> node98
+	node99 [label=i]
+	node97 -> node99
+	node93 -> node97
+	node100 [label=POSTOJANJE]
+	node101 [label="~ceo_broj"]
 	node100 -> node101
 	node102 [label=j]
 	node100 -> node102
-	node99 -> node100
-	node103 [label=NAREDBA_PONAVLJANJE]
-	node104 [label="<"]
-	node105 [label=j]
-	node104 -> node105
-	node106 [label=broj_kolona]
-	node104 -> node106
+	node93 -> node100
+	node103 [label=DODELA]
+	node104 [label=0]
 	node103 -> node104
-	node107 [label=CELINA_PONOVI]
-	node108 [label=UGRADJENA_RUTINA_POZIV]
-	node109 [label=ARGUMENTI]
-	node110 [label=ELEMENT_NIZA]
-	node111 [label=resenje]
-	node110 -> node111
-	node112 [label=ELEMENT_NIZA]
-	node113 [label=i]
-	node112 -> node113
-	node114 [label=j]
-	node112 -> node114
-	node110 -> node112
-	node109 -> node110
-	node108 -> node109
-	node115 [label=ispisi]
-	node108 -> node115
+	node105 [label=j]
+	node103 -> node105
+	node93 -> node103
+	node106 [label=NAREDBA_PONAVLJANJE]
+	node107 [label="<"]
+	node108 [label=i]
 	node107 -> node108
-	node116 [label=DODELA]
-	node117 [label="+"]
-	node118 [label=j]
-	node117 -> node118
-	node119 [label=1]
-	node117 -> node119
-	node116 -> node117
-	node120 [label=j]
-	node116 -> node120
-	node107 -> node116
-	node103 -> node107
-	node99 -> node103
-	node121 [label=UGRADJENA_RUTINA_POZIV]
-	node122 [label=ARGUMENTI]
-	node123 [label="\"\n\""]
-	node122 -> node123
+	node109 [label=broj_redova]
+	node107 -> node109
+	node106 -> node107
+	node110 [label=CELINA_PONOVI]
+	node111 [label=DODELA]
+	node112 [label=0]
+	node111 -> node112
+	node113 [label=j]
+	node111 -> node113
+	node110 -> node111
+	node114 [label=NAREDBA_PONAVLJANJE]
+	node115 [label="<"]
+	node116 [label=j]
+	node115 -> node116
+	node117 [label=broj_kolona]
+	node115 -> node117
+	node114 -> node115
+	node118 [label=CELINA_PONOVI]
+	node119 [label=UGRADJENA_RUTINA_POZIV]
+	node120 [label=ARGUMENTI]
+	node121 [label=ELEMENT_NIZA]
+	node122 [label=resenje]
 	node121 -> node122
-	node124 [label=ispisi]
-	node121 -> node124
-	node99 -> node121
-	node125 [label=DODELA]
-	node126 [label="+"]
-	node127 [label=i]
-	node126 -> node127
-	node128 [label=1]
-	node126 -> node128
-	node125 -> node126
-	node129 [label=i]
-	node125 -> node129
-	node99 -> node125
-	node95 -> node99
-	node82 -> node95
-	node81 -> node82
-	node130 [label=ispisi_resenje]
-	node81 -> node130
-	node1 -> node81
-	node131 [label=POSTOJANJE]
-	node132 [label="~struna"]
-	node131 -> node132
-	node133 [label=recenica]
-	node131 -> node133
-	node1 -> node131
-	node134 [label=DODELA]
-	node135 [label=UGRADJENA_RUTINA_POZIV]
-	node136 [label=ARGUMENTI]
-	node135 -> node136
-	node137 [label=ucitaj]
-	node135 -> node137
-	node134 -> node135
-	node138 [label=recenica]
-	node134 -> node138
-	node1 -> node134
-	node139 [label=POSTOJANJE]
-	node140 [label="~struna"]
-	node139 -> node140
-	node141 [label=reci]
-	node139 -> node141
-	node1 -> node139
-	node142 [label=DODELA]
-	node143 [label=UGRADJENA_RUTINA_POZIV]
-	node144 [label=ARGUMENTI]
-	node145 [label=recenica]
-	node144 -> node145
-	node146 [label="\" \""]
-	node144 -> node146
-	node143 -> node144
-	node147 [label=podeli_strunu]
-	node143 -> node147
+	node123 [label=ELEMENT_NIZA]
+	node124 [label=i]
+	node123 -> node124
+	node125 [label=j]
+	node123 -> node125
+	node121 -> node123
+	node120 -> node121
+	node119 -> node120
+	node126 [label=ispisi]
+	node119 -> node126
+	node118 -> node119
+	node127 [label=DODELA]
+	node128 [label="+"]
+	node129 [label=j]
+	node128 -> node129
+	node130 [label=1]
+	node128 -> node130
+	node127 -> node128
+	node131 [label=j]
+	node127 -> node131
+	node118 -> node127
+	node114 -> node118
+	node110 -> node114
+	node132 [label=UGRADJENA_RUTINA_POZIV]
+	node133 [label=ARGUMENTI]
+	node134 [label="\"\n\""]
+	node133 -> node134
+	node132 -> node133
+	node135 [label=ispisi]
+	node132 -> node135
+	node110 -> node132
+	node136 [label=DODELA]
+	node137 [label="+"]
+	node138 [label=i]
+	node137 -> node138
+	node139 [label=1]
+	node137 -> node139
+	node136 -> node137
+	node140 [label=i]
+	node136 -> node140
+	node110 -> node136
+	node106 -> node110
+	node93 -> node106
+	node92 -> node93
+	node141 [label=CELINA_POLJA]
+	node142 [label=POLJE]
+	node143 [label="~ceo_broj"]
 	node142 -> node143
-	node148 [label=reci]
-	node142 -> node148
-	node1 -> node142
-	node149 [label=POSTOJANJE]
-	node150 [label="~ceo_broj"]
-	node149 -> node150
-	node151 [label=broj_reci]
-	node149 -> node151
-	node1 -> node149
-	node152 [label=DODELA]
-	node153 [label=UGRADJENA_RUTINA_POZIV]
-	node154 [label=ARGUMENTI]
-	node155 [label=reci]
-	node154 -> node155
-	node153 -> node154
-	node156 [label=duzina_strune]
-	node153 -> node156
+	node144 [label=broj_redova]
+	node142 -> node144
+	node141 -> node142
+	node145 [label=POLJE]
+	node146 [label="~ceo_broj"]
+	node145 -> node146
+	node147 [label=broj_kolona]
+	node145 -> node147
+	node141 -> node145
+	node148 [label=POLJE]
+	node149 [label="~struna"]
+	node148 -> node149
+	node150 [label=resenje]
+	node148 -> node150
+	node141 -> node148
+	node92 -> node141
+	node151 [label=ispisi_resenje]
+	node92 -> node151
+	node1 -> node92
+	node152 [label=POSTOJANJE]
+	node153 [label="~struna"]
 	node152 -> node153
-	node157 [label=broj_reci]
-	node152 -> node157
+	node154 [label=recenica]
+	node152 -> node154
 	node1 -> node152
-	node158 [label=POSTOJANJE]
-	node159 [label="~ceo_broj"]
-	node158 -> node159
-	node160 [label=max_duzina]
-	node158 -> node160
-	node1 -> node158
-	node161 [label=DODELA]
-	node162 [label=RUTINA_POZIV]
-	node163 [label=ARGUMENTI]
-	node164 [label=reci]
+	node155 [label=DODELA]
+	node156 [label=UGRADJENA_RUTINA_POZIV]
+	node157 [label=ARGUMENTI]
+	node156 -> node157
+	node158 [label=ucitaj]
+	node156 -> node158
+	node155 -> node156
+	node159 [label=recenica]
+	node155 -> node159
+	node1 -> node155
+	node160 [label=POSTOJANJE]
+	node161 [label="~struna"]
+	node160 -> node161
+	node162 [label=reci]
+	node160 -> node162
+	node1 -> node160
+	node163 [label=DODELA]
+	node164 [label=UGRADJENA_RUTINA_POZIV]
+	node165 [label=ARGUMENTI]
+	node166 [label=recenica]
+	node165 -> node166
+	node167 [label="\" \""]
+	node165 -> node167
+	node164 -> node165
+	node168 [label=podeli_strunu]
+	node164 -> node168
 	node163 -> node164
-	node165 [label=broj_reci]
-	node163 -> node165
-	node162 -> node163
-	node166 [label=duzina_najduze_reci]
-	node162 -> node166
-	node161 -> node162
-	node167 [label=max_duzina]
-	node161 -> node167
-	node1 -> node161
-	node168 [label=POSTOJANJE]
-	node169 [label="~struna"]
-	node168 -> node169
-	node170 [label=resenje]
-	node168 -> node170
-	node1 -> node168
-	node171 [label=DODELA]
-	node172 [label=RUTINA_POZIV]
-	node173 [label=ARGUMENTI]
-	node174 [label=max_duzina]
+	node169 [label=reci]
+	node163 -> node169
+	node1 -> node163
+	node170 [label=POSTOJANJE]
+	node171 [label="~ceo_broj"]
+	node170 -> node171
+	node172 [label=broj_reci]
+	node170 -> node172
+	node1 -> node170
+	node173 [label=DODELA]
+	node174 [label=UGRADJENA_RUTINA_POZIV]
+	node175 [label=ARGUMENTI]
+	node176 [label=reci]
+	node175 -> node176
+	node174 -> node175
+	node177 [label=duzina_strune]
+	node174 -> node177
 	node173 -> node174
-	node172 -> node173
-	node175 [label=red_zvezdica]
-	node172 -> node175
-	node171 -> node172
-	node176 [label=ELEMENT_NIZA]
-	node177 [label=resenje]
-	node176 -> node177
-	node178 [label=0]
-	node176 -> node178
-	node171 -> node176
-	node1 -> node171
+	node178 [label=broj_reci]
+	node173 -> node178
+	node1 -> node173
 	node179 [label=POSTOJANJE]
 	node180 [label="~ceo_broj"]
 	node179 -> node180
-	node181 [label=i]
+	node181 [label=max_duzina]
 	node179 -> node181
 	node1 -> node179
 	node182 [label=DODELA]
-	node183 [label=0]
+	node183 [label=RUTINA_POZIV]
+	node184 [label=ARGUMENTI]
+	node185 [label=reci]
+	node184 -> node185
+	node186 [label=broj_reci]
+	node184 -> node186
+	node183 -> node184
+	node187 [label=duzina_najduze_reci]
+	node183 -> node187
 	node182 -> node183
-	node184 [label=i]
-	node182 -> node184
+	node188 [label=max_duzina]
+	node182 -> node188
 	node1 -> node182
-	node185 [label=NAREDBA_PONAVLJANJE]
-	node186 [label="<"]
-	node187 [label=i]
-	node186 -> node187
-	node188 [label=broj_reci]
-	node186 -> node188
-	node185 -> node186
-	node189 [label=CELINA_PONOVI]
-	node190 [label=DODELA]
-	node191 [label="\"*\""]
-	node190 -> node191
-	node192 [label=ELEMENT_NIZA]
-	node193 [label=resenje]
-	node192 -> node193
-	node194 [label="+"]
-	node195 [label=i]
-	node194 -> node195
-	node196 [label=1]
-	node194 -> node196
-	node192 -> node194
-	node197 [label=0]
-	node192 -> node197
-	node190 -> node192
+	node189 [label=POSTOJANJE]
+	node190 [label="~struna"]
 	node189 -> node190
-	node198 [label=DODELA]
-	node199 [label="\" \""]
-	node198 -> node199
-	node200 [label=ELEMENT_NIZA]
-	node201 [label=resenje]
+	node191 [label=resenje]
+	node189 -> node191
+	node1 -> node189
+	node192 [label=DODELA]
+	node193 [label=RUTINA_POZIV]
+	node194 [label=ARGUMENTI]
+	node195 [label=max_duzina]
+	node194 -> node195
+	node193 -> node194
+	node196 [label=red_zvezdica]
+	node193 -> node196
+	node192 -> node193
+	node197 [label=ELEMENT_NIZA]
+	node198 [label=resenje]
+	node197 -> node198
+	node199 [label=0]
+	node197 -> node199
+	node192 -> node197
+	node1 -> node192
+	node200 [label=POSTOJANJE]
+	node201 [label="~ceo_broj"]
 	node200 -> node201
-	node202 [label="+"]
-	node203 [label=i]
-	node202 -> node203
-	node204 [label=1]
-	node202 -> node204
+	node202 [label=i]
 	node200 -> node202
-	node205 [label=1]
-	node200 -> node205
-	node198 -> node200
-	node189 -> node198
-	node206 [label=POSTOJANJE]
-	node207 [label="~ceo_broj"]
+	node1 -> node200
+	node203 [label=DODELA]
+	node204 [label=0]
+	node203 -> node204
+	node205 [label=i]
+	node203 -> node205
+	node1 -> node203
+	node206 [label=NAREDBA_PONAVLJANJE]
+	node207 [label="<"]
+	node208 [label=i]
+	node207 -> node208
+	node209 [label=broj_reci]
+	node207 -> node209
 	node206 -> node207
-	node208 [label=j]
-	node206 -> node208
-	node189 -> node206
-	node209 [label=DODELA]
-	node210 [label=0]
-	node209 -> node210
-	node211 [label=j]
-	node209 -> node211
-	node189 -> node209
-	node212 [label=NAREDBA_PONAVLJANJE]
-	node213 [label="<"]
-	node214 [label=j]
+	node210 [label=CELINA_PONOVI]
+	node211 [label=DODELA]
+	node212 [label="\"*\""]
+	node211 -> node212
+	node213 [label=ELEMENT_NIZA]
+	node214 [label=resenje]
 	node213 -> node214
-	node215 [label=UGRADJENA_RUTINA_POZIV]
-	node216 [label=ARGUMENTI]
-	node217 [label=ELEMENT_NIZA]
-	node218 [label=reci]
-	node217 -> node218
-	node219 [label=i]
-	node217 -> node219
-	node216 -> node217
+	node215 [label="+"]
+	node216 [label=i]
 	node215 -> node216
-	node220 [label=duzina_strune]
-	node215 -> node220
+	node217 [label=1]
+	node215 -> node217
 	node213 -> node215
-	node212 -> node213
-	node221 [label=CELINA_PONOVI]
-	node222 [label=DODELA]
-	node223 [label=ELEMENT_NIZA]
-	node224 [label=reci]
-	node223 -> node224
-	node225 [label=ELEMENT_NIZA]
-	node226 [label=i]
-	node225 -> node226
-	node227 [label=j]
-	node225 -> node227
-	node223 -> node225
-	node222 -> node223
-	node228 [label=ELEMENT_NIZA]
-	node229 [label=resenje]
-	node228 -> node229
-	node230 [label="+"]
-	node231 [label=i]
-	node230 -> node231
-	node232 [label=1]
-	node230 -> node232
-	node228 -> node230
-	node233 [label="+"]
-	node234 [label=j]
-	node233 -> node234
-	node235 [label=2]
-	node233 -> node235
-	node228 -> node233
-	node222 -> node228
+	node218 [label=0]
+	node213 -> node218
+	node211 -> node213
+	node210 -> node211
+	node219 [label=DODELA]
+	node220 [label="\" \""]
+	node219 -> node220
+	node221 [label=ELEMENT_NIZA]
+	node222 [label=resenje]
 	node221 -> node222
-	node236 [label=DODELA]
-	node237 [label="+"]
-	node238 [label=j]
+	node223 [label="+"]
+	node224 [label=i]
+	node223 -> node224
+	node225 [label=1]
+	node223 -> node225
+	node221 -> node223
+	node226 [label=1]
+	node221 -> node226
+	node219 -> node221
+	node210 -> node219
+	node227 [label=POSTOJANJE]
+	node228 [label="~ceo_broj"]
+	node227 -> node228
+	node229 [label=j]
+	node227 -> node229
+	node210 -> node227
+	node230 [label=DODELA]
+	node231 [label=0]
+	node230 -> node231
+	node232 [label=j]
+	node230 -> node232
+	node210 -> node230
+	node233 [label=NAREDBA_PONAVLJANJE]
+	node234 [label="<"]
+	node235 [label=j]
+	node234 -> node235
+	node236 [label=UGRADJENA_RUTINA_POZIV]
+	node237 [label=ARGUMENTI]
+	node238 [label=ELEMENT_NIZA]
+	node239 [label=reci]
+	node238 -> node239
+	node240 [label=i]
+	node238 -> node240
 	node237 -> node238
-	node239 [label=1]
-	node237 -> node239
 	node236 -> node237
-	node240 [label=j]
-	node236 -> node240
-	node221 -> node236
-	node212 -> node221
-	node189 -> node212
-	node241 [label=NAREDBA_PONAVLJANJE]
-	node242 [label="<"]
-	node243 [label=j]
-	node242 -> node243
-	node244 [label=max_duzina]
-	node242 -> node244
-	node241 -> node242
-	node245 [label=CELINA_PONOVI]
-	node246 [label=DODELA]
-	node247 [label="\" \""]
+	node241 [label=duzina_strune]
+	node236 -> node241
+	node234 -> node236
+	node233 -> node234
+	node242 [label=CELINA_PONOVI]
+	node243 [label=DODELA]
+	node244 [label=ELEMENT_NIZA]
+	node245 [label=reci]
+	node244 -> node245
+	node246 [label=ELEMENT_NIZA]
+	node247 [label=i]
 	node246 -> node247
-	node248 [label=ELEMENT_NIZA]
-	node249 [label=resenje]
-	node248 -> node249
-	node250 [label="+"]
-	node251 [label=i]
-	node250 -> node251
-	node252 [label=1]
-	node250 -> node252
-	node248 -> node250
-	node253 [label="+"]
-	node254 [label=j]
-	node253 -> node254
-	node255 [label=2]
-	node253 -> node255
-	node248 -> node253
+	node248 [label=j]
 	node246 -> node248
-	node245 -> node246
-	node256 [label=DODELA]
-	node257 [label="+"]
-	node258 [label=j]
+	node244 -> node246
+	node243 -> node244
+	node249 [label=ELEMENT_NIZA]
+	node250 [label=resenje]
+	node249 -> node250
+	node251 [label="+"]
+	node252 [label=i]
+	node251 -> node252
+	node253 [label=1]
+	node251 -> node253
+	node249 -> node251
+	node254 [label="+"]
+	node255 [label=j]
+	node254 -> node255
+	node256 [label=2]
+	node254 -> node256
+	node249 -> node254
+	node243 -> node249
+	node242 -> node243
+	node257 [label=DODELA]
+	node258 [label="+"]
+	node259 [label=j]
+	node258 -> node259
+	node260 [label=1]
+	node258 -> node260
 	node257 -> node258
-	node259 [label=1]
-	node257 -> node259
-	node256 -> node257
-	node260 [label=j]
-	node256 -> node260
-	node245 -> node256
-	node241 -> node245
-	node189 -> node241
-	node261 [label=DODELA]
-	node262 [label="\" \""]
-	node261 -> node262
-	node263 [label=ELEMENT_NIZA]
-	node264 [label=resenje]
+	node261 [label=j]
+	node257 -> node261
+	node242 -> node257
+	node233 -> node242
+	node210 -> node233
+	node262 [label=NAREDBA_PONAVLJANJE]
+	node263 [label="<"]
+	node264 [label=j]
 	node263 -> node264
-	node265 [label="+"]
-	node266 [label=i]
-	node265 -> node266
-	node267 [label=1]
-	node265 -> node267
+	node265 [label=max_duzina]
 	node263 -> node265
-	node268 [label="+"]
-	node269 [label=j]
-	node268 -> node269
-	node270 [label=2]
-	node268 -> node270
-	node263 -> node268
-	node261 -> node263
-	node189 -> node261
-	node271 [label=DODELA]
-	node272 [label="\"*\""]
+	node262 -> node263
+	node266 [label=CELINA_PONOVI]
+	node267 [label=DODELA]
+	node268 [label="\" \""]
+	node267 -> node268
+	node269 [label=ELEMENT_NIZA]
+	node270 [label=resenje]
+	node269 -> node270
+	node271 [label="+"]
+	node272 [label=i]
 	node271 -> node272
-	node273 [label=ELEMENT_NIZA]
-	node274 [label=resenje]
-	node273 -> node274
-	node275 [label="+"]
-	node276 [label=i]
-	node275 -> node276
-	node277 [label=1]
-	node275 -> node277
-	node273 -> node275
+	node273 [label=1]
+	node271 -> node273
+	node269 -> node271
+	node274 [label="+"]
+	node275 [label=j]
+	node274 -> node275
+	node276 [label=2]
+	node274 -> node276
+	node269 -> node274
+	node267 -> node269
+	node266 -> node267
+	node277 [label=DODELA]
 	node278 [label="+"]
 	node279 [label=j]
 	node278 -> node279
-	node280 [label=3]
+	node280 [label=1]
 	node278 -> node280
-	node273 -> node278
-	node271 -> node273
-	node189 -> node271
-	node281 [label=DODELA]
-	node282 [label="+"]
-	node283 [label=i]
+	node277 -> node278
+	node281 [label=j]
+	node277 -> node281
+	node266 -> node277
+	node262 -> node266
+	node210 -> node262
+	node282 [label=DODELA]
+	node283 [label="\" \""]
 	node282 -> node283
-	node284 [label=1]
-	node282 -> node284
-	node281 -> node282
-	node285 [label=i]
-	node281 -> node285
-	node189 -> node281
-	node185 -> node189
-	node1 -> node185
-	node286 [label=DODELA]
-	node287 [label=RUTINA_POZIV]
-	node288 [label=ARGUMENTI]
-	node289 [label=max_duzina]
-	node288 -> node289
-	node287 -> node288
-	node290 [label=red_zvezdica]
-	node287 -> node290
+	node284 [label=ELEMENT_NIZA]
+	node285 [label=resenje]
+	node284 -> node285
+	node286 [label="+"]
+	node287 [label=i]
 	node286 -> node287
-	node291 [label=ELEMENT_NIZA]
-	node292 [label=resenje]
-	node291 -> node292
-	node293 [label="+"]
-	node294 [label=broj_reci]
-	node293 -> node294
-	node295 [label=1]
-	node293 -> node295
-	node291 -> node293
-	node286 -> node291
-	node1 -> node286
-	node296 [label=RUTINA_POZIV]
-	node297 [label=ARGUMENTI]
-	node298 [label="+"]
-	node299 [label=broj_reci]
-	node298 -> node299
-	node300 [label=2]
-	node298 -> node300
-	node297 -> node298
-	node301 [label="+"]
-	node302 [label=max_duzina]
-	node301 -> node302
-	node303 [label=4]
-	node301 -> node303
-	node297 -> node301
-	node304 [label=resenje]
-	node297 -> node304
+	node288 [label=1]
+	node286 -> node288
+	node284 -> node286
+	node289 [label="+"]
+	node290 [label=j]
+	node289 -> node290
+	node291 [label=2]
+	node289 -> node291
+	node284 -> node289
+	node282 -> node284
+	node210 -> node282
+	node292 [label=DODELA]
+	node293 [label="\"*\""]
+	node292 -> node293
+	node294 [label=ELEMENT_NIZA]
+	node295 [label=resenje]
+	node294 -> node295
+	node296 [label="+"]
+	node297 [label=i]
 	node296 -> node297
-	node305 [label=ispisi_resenje]
-	node296 -> node305
-	node1 -> node296
+	node298 [label=1]
+	node296 -> node298
+	node294 -> node296
+	node299 [label="+"]
+	node300 [label=j]
+	node299 -> node300
+	node301 [label=3]
+	node299 -> node301
+	node294 -> node299
+	node292 -> node294
+	node210 -> node292
+	node302 [label=DODELA]
+	node303 [label="+"]
+	node304 [label=i]
+	node303 -> node304
+	node305 [label=1]
+	node303 -> node305
+	node302 -> node303
+	node306 [label=i]
+	node302 -> node306
+	node210 -> node302
+	node206 -> node210
+	node1 -> node206
+	node307 [label=DODELA]
+	node308 [label=RUTINA_POZIV]
+	node309 [label=ARGUMENTI]
+	node310 [label=max_duzina]
+	node309 -> node310
+	node308 -> node309
+	node311 [label=red_zvezdica]
+	node308 -> node311
+	node307 -> node308
+	node312 [label=ELEMENT_NIZA]
+	node313 [label=resenje]
+	node312 -> node313
+	node314 [label="+"]
+	node315 [label=broj_reci]
+	node314 -> node315
+	node316 [label=1]
+	node314 -> node316
+	node312 -> node314
+	node307 -> node312
+	node1 -> node307
+	node317 [label=RUTINA_POZIV]
+	node318 [label=ARGUMENTI]
+	node319 [label="+"]
+	node320 [label=broj_reci]
+	node319 -> node320
+	node321 [label=2]
+	node319 -> node321
+	node318 -> node319
+	node322 [label="+"]
+	node323 [label=max_duzina]
+	node322 -> node323
+	node324 [label=4]
+	node322 -> node324
+	node318 -> node322
+	node325 [label=resenje]
+	node318 -> node325
+	node317 -> node318
+	node326 [label=ispisi_resenje]
+	node317 -> node326
+	node1 -> node317
 }

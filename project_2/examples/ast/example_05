@@ -212,113 +212,129 @@ digraph {
 	node105 -> node106
 	node4 -> node105
 	node2 -> node4
-	node107 [label=sortiraj]
-	node2 -> node107
-	node1 -> node2
-	node108 [label=RUTINA]
-	node109 [label=CELINA_SADRZAJ_RUTINE]
-	node110 [label=POSTOJANJE]
-	node111 [label="~ceo_broj"]
-	node110 -> node111
-	node112 [label=n]
-	node110 -> node112
-	node109 -> node110
-	node113 [label=DODELA]
-	node114 [label=UGRADJENA_RUTINA_POZIV]
-	node115 [label=ARGUMENTI]
-	node116 [label=niz]
-	node115 -> node116
-	node114 -> node115
-	node117 [label=duzina_strune]
-	node114 -> node117
-	node113 -> node114
-	node118 [label=n]
-	node113 -> node118
-	node109 -> node113
-	node119 [label=POSTOJANJE]
-	node120 [label="~ceo_broj"]
-	node119 -> node120
-	node121 [label=i]
-	node119 -> node121
-	node109 -> node119
-	node122 [label=DODELA]
-	node123 [label=0]
-	node122 -> node123
-	node124 [label=i]
-	node122 -> node124
-	node109 -> node122
-	node125 [label=NAREDBA_PONAVLJANJE]
-	node126 [label="<"]
-	node127 [label=i]
-	node126 -> node127
-	node128 [label=n]
-	node126 -> node128
-	node125 -> node126
-	node129 [label=CELINA_PONOVI]
-	node130 [label=UGRADJENA_RUTINA_POZIV]
-	node131 [label=ARGUMENTI]
-	node132 [label=UGRADJENA_RUTINA_POZIV]
-	node133 [label=ARGUMENTI]
-	node134 [label=ELEMENT_NIZA]
-	node135 [label=niz]
-	node134 -> node135
-	node136 [label=i]
-	node134 -> node136
-	node133 -> node134
-	node137 [label="\" \""]
-	node133 -> node137
-	node132 -> node133
-	node138 [label=spoji_strune]
-	node132 -> node138
-	node131 -> node132
-	node130 -> node131
-	node139 [label=ispisi]
-	node130 -> node139
-	node129 -> node130
-	node140 [label=DODELA]
-	node141 [label="+"]
-	node142 [label=i]
-	node141 -> node142
-	node143 [label=1]
-	node141 -> node143
-	node140 -> node141
-	node144 [label=i]
-	node140 -> node144
-	node129 -> node140
-	node125 -> node129
-	node109 -> node125
+	node107 [label=CELINA_POLJA]
+	node108 [label=POLJE]
+	node109 [label="~struna"]
 	node108 -> node109
-	node145 [label=ispisi_strunu_lepo]
-	node108 -> node145
-	node1 -> node108
-	node146 [label=POSTOJANJE]
-	node147 [label="~struna"]
-	node146 -> node147
-	node148 [label=niz]
-	node146 -> node148
-	node1 -> node146
-	node149 [label=DODELA]
-	node150 [label=UGRADJENA_RUTINA_POZIV]
-	node151 [label=ARGUMENTI]
+	node110 [label=niz]
+	node108 -> node110
+	node107 -> node108
+	node2 -> node107
+	node111 [label=sortiraj]
+	node2 -> node111
+	node1 -> node2
+	node112 [label=RUTINA]
+	node113 [label=CELINA_SADRZAJ_RUTINE]
+	node114 [label=POSTOJANJE]
+	node115 [label="~ceo_broj"]
+	node114 -> node115
+	node116 [label=n]
+	node114 -> node116
+	node113 -> node114
+	node117 [label=DODELA]
+	node118 [label=UGRADJENA_RUTINA_POZIV]
+	node119 [label=ARGUMENTI]
+	node120 [label=niz]
+	node119 -> node120
+	node118 -> node119
+	node121 [label=duzina_strune]
+	node118 -> node121
+	node117 -> node118
+	node122 [label=n]
+	node117 -> node122
+	node113 -> node117
+	node123 [label=POSTOJANJE]
+	node124 [label="~ceo_broj"]
+	node123 -> node124
+	node125 [label=i]
+	node123 -> node125
+	node113 -> node123
+	node126 [label=DODELA]
+	node127 [label=0]
+	node126 -> node127
+	node128 [label=i]
+	node126 -> node128
+	node113 -> node126
+	node129 [label=NAREDBA_PONAVLJANJE]
+	node130 [label="<"]
+	node131 [label=i]
+	node130 -> node131
+	node132 [label=n]
+	node130 -> node132
+	node129 -> node130
+	node133 [label=CELINA_PONOVI]
+	node134 [label=UGRADJENA_RUTINA_POZIV]
+	node135 [label=ARGUMENTI]
+	node136 [label=UGRADJENA_RUTINA_POZIV]
+	node137 [label=ARGUMENTI]
+	node138 [label=ELEMENT_NIZA]
+	node139 [label=niz]
+	node138 -> node139
+	node140 [label=i]
+	node138 -> node140
+	node137 -> node138
+	node141 [label="\" \""]
+	node137 -> node141
+	node136 -> node137
+	node142 [label=spoji_strune]
+	node136 -> node142
+	node135 -> node136
+	node134 -> node135
+	node143 [label=ispisi]
+	node134 -> node143
+	node133 -> node134
+	node144 [label=DODELA]
+	node145 [label="+"]
+	node146 [label=i]
+	node145 -> node146
+	node147 [label=1]
+	node145 -> node147
+	node144 -> node145
+	node148 [label=i]
+	node144 -> node148
+	node133 -> node144
+	node129 -> node133
+	node113 -> node129
+	node112 -> node113
+	node149 [label=CELINA_POLJA]
+	node150 [label=POLJE]
+	node151 [label="~struna"]
 	node150 -> node151
-	node152 [label=ucitaj]
+	node152 [label=niz]
 	node150 -> node152
 	node149 -> node150
-	node153 [label=niz]
-	node149 -> node153
-	node1 -> node149
-	node154 [label=RUTINA_POZIV]
-	node155 [label=ARGUMENTI]
-	node156 [label=RUTINA_POZIV]
-	node157 [label=ARGUMENTI]
-	node158 [label=niz]
-	node157 -> node158
-	node156 -> node157
-	node159 [label=sortiraj]
-	node156 -> node159
-	node155 -> node156
+	node112 -> node149
+	node153 [label=ispisi_strunu_lepo]
+	node112 -> node153
+	node1 -> node112
+	node154 [label=POSTOJANJE]
+	node155 [label="~struna"]
 	node154 -> node155
-	node160 [label=ispisi_strunu_lepo]
-	node154 -> node160
+	node156 [label=niz]
+	node154 -> node156
 	node1 -> node154
+	node157 [label=DODELA]
+	node158 [label=UGRADJENA_RUTINA_POZIV]
+	node159 [label=ARGUMENTI]
+	node158 -> node159
+	node160 [label=ucitaj]
+	node158 -> node160
+	node157 -> node158
+	node161 [label=niz]
+	node157 -> node161
+	node1 -> node157
+	node162 [label=RUTINA_POZIV]
+	node163 [label=ARGUMENTI]
+	node164 [label=RUTINA_POZIV]
+	node165 [label=ARGUMENTI]
+	node166 [label=niz]
+	node165 -> node166
+	node164 -> node165
+	node167 [label=sortiraj]
+	node164 -> node167
+	node163 -> node164
+	node162 -> node163
+	node168 [label=ispisi_strunu_lepo]
+	node162 -> node168
+	node1 -> node162
 }

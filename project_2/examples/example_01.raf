@@ -10,7 +10,7 @@
 			#~ugradjena_rutina | "Neparan broj" ##~ugradjena_rutina:ispisi
 		##celina:ne
 		#celina
-			n % 2 = 0
+			n % -2 = 0
 		##celina:pitanje
 	##naredba:uslov
 ##program

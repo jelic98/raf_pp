@@ -1,12 +1,20 @@
 from app.nodes import *
 
-vars = []
+vars = {}
+funs = {}
 
 class Var:
-    def __init__(self, type, name, value):
-        self.type = type
-        self.name = name
-        self.value = value
+    def __init__(self, tip, naziv):
+        self.tip = tip
+        self.naziv = naziv
+        self.vrednost = None
+
+class Fun:
+    def __init__(self, tip, naziv, vars, sadrzaj):
+        self.tip = tip
+        self.naziv = naziv
+        self.vars = vars
+        self.sadrzaj = sadrzaj
 
 class NodeVisitor(object):
         def visit(self, node):
@@ -23,33 +31,47 @@ class Executor(NodeVisitor):
 
         def visit_Program(self, node):
                 for cvor in node.cvorovi:
+                    if isinstance(cvor, Postojanje):
+                        self.visit(cvor)
+                
+                for cvor in node.cvorovi:
+                    if isinstance(cvor, Dodela):
+                        self.visit(cvor)
+
+                for cvor in node.cvorovi:
+                    if isinstance(cvor, Rutina):
+                        self.visit(cvor)
+            
+                for cvor in node.cvorovi:
+                    if(not isinstance(cvor, Postojanje)
+                        and not isinstance(cvor, Dodela)
+                        and not isinstance(cvor, Rutina)):
                         self.visit(cvor)
         
         def visit_Postojanje(self, node):
-                tip = self.visit(node.tip)
                 naziv = self.visit(node.naziv)
-                vars.append(Var(tip, naziv, None))
+                vars[naziv] = Var(node.tip, naziv)
 
         def visit_Dodela(self, node):
                 izraz = self.visit(node.izraz)
                 varijabla = self.visit(node.varijabla)
-
-                for var in vars:
-                    if var.name == varijabla:
-                        var.value = izraz
-                        break
+                vars[varijabla].vrednost = izraz
 
         def visit_Polje(self, node):
                 tip = self.visit(node.tip)
                 naziv = self.visit(node.naziv)
 
         def visit_Rutina(self, node):
+                tip = None
                 if node.tip is not None:
                     tip = self.visit(node.tip)
-
-                sadrzaj = self.visit(node.sadrzaj)
                 naziv = self.visit(node.naziv)
-
+                vars = {}
+                for polje in node.polja.cvorovi:
+                    polje_naziv = self.visit(polje.naziv)
+                    vars[polje_naziv] = Var(polje.tip, polje_naziv)
+                funs[naziv] = Fun(tip, naziv, vars, node.sadrzaj)
+        
         def visit_Argumenti(self, node):
                 argumenti = []
                 for arg in node.argumenti:
@@ -60,6 +82,7 @@ class Executor(NodeVisitor):
         def visit_RutinaPoziv(self, node):
                 argumenti = self.visit(node.argumenti)
                 naziv = self.visit(node.naziv)
+                self.visit(funs[naziv].sadrzaj)
 
         def visit_UgradjenaRutinaPoziv(self, node):
                 argumenti = self.visit(node.argumenti)
@@ -72,33 +95,30 @@ class Executor(NodeVisitor):
                     s = ""
                     for arg in node.argumenti.argumenti:
                         if isinstance(arg, Naziv):
-                            for var in vars:
-                                if var.name == arg.naziv:
-                                    s += str(var.value)
-                                    break
+                            s += str(vars[arg.naziv].vrednost)
                         else:
                             s += str(self.visit(arg))
                     return s
                 return None
 
         def visit_Vrati(self, node):
-                izraz = self.visit(node.izraz)
+                return self.visit(node.izraz)
 
         def visit_PrekiniPonavljanje(self, node):
                 pass
         
         def visit_NaredbaUslov(self, node):
                 pitanje = self.visit(node.pitanje)
-
                 if pitanje:
-                    da = self.visit(node.da)
+                    self.visit(node.da)
                 else:
                     if node.ne != None:
-                        ne = self.visit(node.ne)
+                        self.visit(node.ne)
 
         def visit_NaredbaPonavljanje(self, node):
                 pitanje = self.visit(node.pitanje)
-                ponovi = self.visit(node.ponovi)
+                while pitanje:
+                    self.visit(node.ponovi)
 
         def visit_CelinaCelina(self, node):
                 for cvor in node.cvorovi:
@@ -131,16 +151,10 @@ class Executor(NodeVisitor):
                 drugi = self.visit(node.drugi)
                
                 if isinstance(node.prvi, Naziv):
-                    for var in vars:
-                        if var.name == prvi:
-                            prvi = var.value
-                            break
+                    prvi = vars[prvi].vrednost
 
                 if isinstance(node.drugi, Naziv):
-                    for var in vars:
-                        if var.name == drugi:
-                            drugi = var.value
-                            break
+                    drugi = vars[drugi].vrednost
 
                 if node.simbol == '+':
                     return float(prvi) + float(drugi)
@@ -161,11 +175,31 @@ class Executor(NodeVisitor):
                 elif node.simbol == '>=':
                     return float(prvi) <= float(drugi)
                 elif node.simbol == '=':
-                    return float(prvi) == float(drugi)
+                    if isinstance(node.prvi, CeoBroj) or isinstance(node.drugi, CeoBroj):
+                        return float(prvi) == float(drugi)
+                    elif isinstance(node.prvi, Struna) or isinstance(node.drugi, Struna):
+                        return prvi == drugi
+                    elif isinstance(node.prvi, JesteNije) or isinstance(node.drugi, JesteNije):
+                        return prvi == drugi
+                elif node.simbol == '!=':
+                    return float(prvi) != float(drugi)
+                elif node.simbol == '&&':
+                    return prvi and drugi
+                elif node.simbol == '||':
+                    return prvi or drugi
                 return None
 
         def visit_UnarnaOperacija(self, node):
-                self.visit(node.prvi)
+                prvi = self.visit(node.prvi)
+
+                if isinstance(node.prvi, Naziv):
+                    prvi = vars[prvi].vrednost
+
+                if node.simbol == '-':
+                    return -prvi
+                elif node.simbol == '!':
+                    return not prvi
+                return None
 
         def execute(self):
                 tree = self.parser.program()

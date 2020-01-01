@@ -40,7 +40,7 @@ digraph {
 	node20 [label=10]
 	node18 -> node20
 	node17 -> node18
-	node21 [label=CELINA]
+	node21 [label=CELINA_PONOVI]
 	node22 [label=DODELA]
 	node23 [label=0]
 	node22 -> node23
@@ -96,61 +96,67 @@ digraph {
 	node48 [label=tajni_broj]
 	node46 -> node48
 	node45 -> node46
-	node49 [label=CELINA]
+	node49 [label=CELINA_PONOVI]
 	node50 [label=DODELA]
 	node51 [label=UGRADJENA_RUTINA_POZIV]
-	node52 [label=ucitaj]
+	node52 [label=ARGUMENTI]
 	node51 -> node52
+	node53 [label=ucitaj]
+	node51 -> node53
 	node50 -> node51
-	node53 [label=n]
-	node50 -> node53
+	node54 [label=n]
+	node50 -> node54
 	node49 -> node50
-	node54 [label=NAREDBA_USLOV]
-	node55 [label="="]
-	node56 [label=ELEMENT_NIZA]
-	node57 [label=pokusaji]
+	node55 [label=NAREDBA_USLOV]
+	node56 [label="="]
+	node57 [label=ELEMENT_NIZA]
+	node58 [label=pokusaji]
+	node57 -> node58
+	node59 [label=n]
+	node57 -> node59
 	node56 -> node57
-	node58 [label=n]
-	node56 -> node58
+	node60 [label=0]
+	node56 -> node60
 	node55 -> node56
-	node59 [label=0]
-	node55 -> node59
-	node54 -> node55
-	node60 [label=CELINA]
-	node61 [label=DODELA]
-	node62 [label=1]
+	node61 [label=CELINA_DA]
+	node62 [label=DODELA]
+	node63 [label=1]
+	node62 -> node63
+	node64 [label=ELEMENT_NIZA]
+	node65 [label=pokusaji]
+	node64 -> node65
+	node66 [label=n]
+	node64 -> node66
+	node62 -> node64
 	node61 -> node62
-	node63 [label=ELEMENT_NIZA]
-	node64 [label=pokusaji]
-	node63 -> node64
-	node65 [label=n]
-	node63 -> node65
-	node61 -> node63
-	node60 -> node61
-	node66 [label=DODELA]
-	node67 [label="+"]
-	node68 [label=broj_pokusaja]
+	node67 [label=DODELA]
+	node68 [label="+"]
+	node69 [label=broj_pokusaja]
+	node68 -> node69
+	node70 [label=1]
+	node68 -> node70
 	node67 -> node68
-	node69 [label=1]
-	node67 -> node69
-	node66 -> node67
-	node70 [label=broj_pokusaja]
-	node66 -> node70
-	node60 -> node66
-	node54 -> node60
-	node49 -> node54
+	node71 [label=broj_pokusaja]
+	node67 -> node71
+	node61 -> node67
+	node55 -> node61
+	node49 -> node55
 	node45 -> node49
 	node1 -> node45
-	node71 [label=UGRADJENA_RUTINA_POZIV]
 	node72 [label=UGRADJENA_RUTINA_POZIV]
-	node73 [label="Broj pokusaja je bio: "]
+	node73 [label=ARGUMENTI]
+	node74 [label=UGRADJENA_RUTINA_POZIV]
+	node75 [label=ARGUMENTI]
+	node76 [label="\"Broj pokusaja je bio: \""]
+	node75 -> node76
+	node77 [label=broj_pokusaja]
+	node75 -> node77
+	node74 -> node75
+	node78 [label=spoji_strune]
+	node74 -> node78
+	node73 -> node74
 	node72 -> node73
-	node74 [label=broj_pokusaja]
-	node72 -> node74
-	node75 [label=spoji_strune]
-	node72 -> node75
-	node71 -> node72
-	node76 [label=ispisi]
-	node71 -> node76
-	node1 -> node71
+	node79 [label=ispisi]
+	node72 -> node79
+	node1 -> node72
 }

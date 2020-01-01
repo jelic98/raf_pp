@@ -173,7 +173,7 @@ class Parser():
 
         def celina_da(self):
                 self.eat(CELINA_POCETAK)
-                celina = self.celina_celina('DA')
+                celina = self.celina_celina(CELINA_DA)
                 self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
@@ -190,7 +190,7 @@ class Parser():
 
         def celina_ne(self):
                 self.eat(CELINA_POCETAK)
-                celina = self.celina_celina('NE')
+                celina = self.celina_celina(CELINA_NE)
                 self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
@@ -207,25 +207,25 @@ class Parser():
 
         def celina_ponovi(self):
                 self.eat(CELINA_POCETAK)
-                celina = self.celina_celina('PONOVI')
+                celina = self.celina_celina(CELINA_PONOVI)
                 self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
                 self.eat(CELINA_PONOVI)
                 return celina
 
-        def celina_polje(self):
+        def celina_polja(self):
                 self.eat(CELINA_POCETAK)
-                polja = self.polje()
+                celina = self.celina_celina(CELINA_POLJA)
                 self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
-                self.eat(CELINA_POLJE)
+                self.eat(CELINA_POLJA)
                 return celina
 
         def celina_sadrzaj_rutine(self):
                 self.eat(CELINA_POCETAK)
-                celina = self.celina_celina('SADRZAJ_RUTINE')
+                celina = self.celina_celina(CELINA_SADRZAJ_RUTINE)
                 self.jump(CELINA_POCETAK, CELINA_KRAJ)
                 self.eat(CELINA_KRAJ)
                 self.eat(COLON)
@@ -249,6 +249,8 @@ class Parser():
                                 cvorovi.append(self.vrati())
                         elif self.current_token.token_type == PREKINI_PONAVLJANJE:
                                 cvorovi.append(self.prekini_ponavljanje())
+                        elif self.current_token.token_type == POLJE_POCETAK:
+                                cvorovi.append(self.polje())
                         else:
                             self.error('Derivation error: CELINA_CELINA')
                 return CelinaCelina(cvorovi, tip)
@@ -260,11 +262,12 @@ class Parser():
             if self.current_token.token_type == TIP_PODATKA:
                     tip = self.tip_podatka()
             sadrzaj = self.celina_sadrzaj_rutine()
+            polja = self.celina_polja()
             self.jump(RUTINA_POCETAK, RUTINA_KRAJ)
             self.eat(RUTINA_KRAJ)
             self.eat(COLON)
             naziv = self.naziv()
-            return Rutina(tip, sadrzaj, naziv)
+            return Rutina(tip, naziv, polja, sadrzaj)
 
         def rutina_poziv(self):
             self.eat(RUTINA_POZIV_POCETAK)
@@ -450,11 +453,11 @@ class Parser():
                         self.check_logic(left_node)
                         right_node = self.compare()
                         self.check_logic(right_node)
-                        left_node = BinarnaOperacija(left_node, LOGICKO_I, right_node)
+                        left_node = BinarnaOperacija(left_node, "&&", right_node)
                 elif self.current_token.token_type == LOGICKO_ILI:
                         self.eat(LOGICKO_ILI)
                         self.check_logic(left_node)
                         right_node = self.compare()
                         self.check_logic(right_node)
-                        left_node = BinarnaOperacija(left_node, LOGICKO_ILI, right_node)
+                        left_node = BinarnaOperacija(left_node, "||", right_node)
                 return left_node
