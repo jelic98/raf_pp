@@ -41,15 +41,15 @@ class Executor(NodeVisitor):
                 for cvor in node.cvorovi:
                     if isinstance(cvor, Postojanje):
                         self.visit(cvor)
+
+                for cvor in node.cvorovi:
+                    if isinstance(cvor, Rutina):
+                        self.visit(cvor)
              
                 for cvor in node.cvorovi:
                     if isinstance(cvor, Dodela):
                         self.visit(cvor)
 
-                for cvor in node.cvorovi:
-                    if isinstance(cvor, Rutina):
-                        self.visit(cvor)
-        
                 for cvor in node.cvorovi:
                     if(not isinstance(cvor, Postojanje)
                         and not isinstance(cvor, Dodela)
@@ -62,9 +62,11 @@ class Executor(NodeVisitor):
         def visit_Dodela(self, node):
                 izraz = self.visit(node.izraz)
                 varijabla = node.varijabla
+                if izraz is None:
+                    return
                 if isinstance(varijabla, Naziv):
                     var = self.get_var(varijabla.naziv)
-                    if var.tip.tip == types[STRUNA]:
+                    if var.tip.tip == types[STRUNA] and izraz[0].isdigit():
                         tokens = izraz.split(" ")
                         if len(tokens) == 1:
                             self.set_var(tokens[0], varijabla.naziv)
@@ -92,6 +94,8 @@ class Executor(NodeVisitor):
                     polje_naziv = polje.naziv.naziv
                     vars[polje_naziv] = Var(polje.tip, polje_naziv)
                     args.append(polje_naziv)
+                if naziv in funs:
+                    raise Exception("Funciton {} is already defined".format(naziv))
                 funs[naziv] = Fun(tip, naziv, vars, args, node.sadrzaj)
         
         def visit_Argumenti(self, node):
@@ -103,8 +107,20 @@ class Executor(NodeVisitor):
         def visit_RutinaPoziv(self, node):
                 argumenti = self.visit(node.argumenti)
                 naziv = node.naziv.naziv
+                if naziv not in funs:
+                    raise Exception("Funciton {} is not defined".format(naziv))
+                if len(argumenti) != len(funs[naziv].args):
+                    raise Exception("Calling function {} with {} arguments instead of {}".format(naziv, len(argumenti), len(funs[naziv].args)))
                 i = 0;
                 for arg in argumenti:
+                    if((funs[naziv].vars[funs[naziv].args[i]].tip.tip == types[CEO_BROJ]
+                        and not arg.isdigit())
+                        or (funs[naziv].vars[funs[naziv].args[i]].tip.tip == types[JESTE_NIJE]
+                            and not arg == "jeste"
+                            and not arg == "nije")
+                        or (funs[naziv].vars[funs[naziv].args[i]].tip.tip == types[STRUNA])
+                            and not isinstance(arg, list)):
+                        raise Exception("Not passing {} to {} function call".format(funs[naziv].vars[funs[naziv].args[i]].tip.tip, naziv))
                     funs[naziv].vars[funs[naziv].args[i]].vrednost = arg
                     i += 1
                 call_stack.append(funs[naziv])
@@ -112,6 +128,8 @@ class Executor(NodeVisitor):
                 call_stack.pop()
                 for (naziv_var, var) in funs[naziv].vars.items():
                     funs[naziv].vars[naziv_var].vrednost = None
+                    if funs[naziv].vars[naziv_var].tip.tip == types[STRUNA]:
+                        funs[naziv].vars[naziv_var].vrednost = []
                 return vrednost
 
         def visit_UgradjenaRutinaPoziv(self, node):
@@ -119,8 +137,8 @@ class Executor(NodeVisitor):
                 naziv = node.naziv.naziv
                 if naziv == "ucitaj":
                     return input()
-                elif naziv == "ispisi":
-                    print(argumenti[0], end="")
+                elif naziv == "ispisi": 
+                    print(str(argumenti[0]).replace("\\n", "\n"), end="")
                 elif naziv == "spoji_strune":
                     s = ""
                     for arg in node.argumenti.argumenti:
@@ -136,12 +154,25 @@ class Executor(NodeVisitor):
                     return s
                 elif naziv == "duzina_strune": 
                     return len(argumenti[0])
+                else:
+                    raise Exception("Funciton {} is not defined".format(naziv))
                 return None
 
         def visit_Vrati(self, node):
                 izraz = node.izraz
                 if isinstance(izraz, Naziv):
+                    if call_stack[-1].vars[izraz.naziv].tip.tip != call_stack[-1].tip:
+                        raise Exception("Returning {} instead of {} from {} function call".format(call_stack[-1].vars[izraz.naziv].tip.tip, call_stack[-1].tip, call_stack[-1].naziv))
                     izraz = call_stack[-1].vars[izraz.naziv].vrednost
+                if((call_stack[-1].tip == types[CEO_BROJ]
+                    and not izraz.isdigit())
+                        or (call_stack[-1].tip == types[JESTE_NIJE]
+                            and not izraz == "jeste"
+                            and not izraz == "nije")
+                        or (call_stack[-1].tip == types[STRUNA])
+                            and not isinstance(izraz, list)):
+                    raise Exception("Not returning {} from {} function call".format(call_stack[-1].tip, call_stack[-1].naziv))
+
                 return izraz
 
         def visit_PrekiniPonavljanje(self, node):
@@ -246,16 +277,22 @@ class Executor(NodeVisitor):
         def add_var(self, tip, naziv):
             if len(call_stack) > 0 and naziv not in call_stack[-1].vars:
                 call_stack[-1].vars[naziv] = Var(tip, naziv)
+                if tip.tip == types[STRUNA]:
+                    call_stack[-1].vars[naziv].vrednost = []
             elif len(call_stack) == 0 and naziv not in vars:
                 vars[naziv] = Var(tip, naziv)
                 if tip.tip == types[STRUNA]:
-                    self.set_var([], naziv)
+                    vars[naziv].vrednost = []
+            else:
+                raise Exception("Variable {} is already defined".format(naziv))
 
         def get_var(self, naziv):
             if len(call_stack) > 0 and naziv in call_stack[-1].vars:
                 return call_stack[-1].vars[naziv]
-            else:
+            elif naziv in vars:
                 return vars[naziv]
+            else:
+                raise Exception("Variable {} is not defined".format(naziv))
 
         def set_var(self, vrednost, naziv, indeksi=None):
             if len(call_stack) > 0 and naziv in call_stack[-1].vars:

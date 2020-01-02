@@ -334,10 +334,16 @@ class Parser():
                             indeksi = []
                             while self.current_token.token_type == COLON:
                                 self.eat(COLON)
-                                indeksi.append(self.expr())
+                                exp = self.expr()
+                                if isinstance(exp, ElementNiza):
+                                    indeksi.append(exp.naziv)
+                                    for i in exp.indeksi:
+                                        indeksi.append(i)
+                                else:
+                                    indeksi.append(exp)
                             return ElementNiza(naziv, indeksi)
                         else:
-                                return naziv
+                            return naziv
 
         def factor(self):
                 token = self.current_token
