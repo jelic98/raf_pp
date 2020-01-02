@@ -4,6 +4,7 @@ from app.nodes import *
 vars = {}
 funs = {}
 call_stack = []
+block_stack = []
 types = {
     CEO_BROJ: "~ceo_broj",
     STRUNA: "~struna",
@@ -66,7 +67,7 @@ class Executor(NodeVisitor):
                     return
                 if isinstance(varijabla, Naziv):
                     var = self.get_var(varijabla.naziv)
-                    if var.tip.tip == types[STRUNA] and izraz[0].isdigit():
+                    if var.tip.tip == types[STRUNA] and str(izraz[0]).isdigit():
                         tokens = izraz.split(" ")
                         if len(tokens) == 1:
                             self.set_var(tokens[0], varijabla.naziv)
@@ -114,7 +115,7 @@ class Executor(NodeVisitor):
                 i = 0;
                 for arg in argumenti:
                     if((funs[naziv].vars[funs[naziv].args[i]].tip.tip == types[CEO_BROJ]
-                        and not arg.isdigit())
+                        and not str(arg).isdigit())
                         or (funs[naziv].vars[funs[naziv].args[i]].tip.tip == types[JESTE_NIJE]
                             and not arg == "jeste"
                             and not arg == "nije")
@@ -154,6 +155,8 @@ class Executor(NodeVisitor):
                     return s
                 elif naziv == "duzina_strune": 
                     return len(argumenti[0])
+                elif naziv == "podeli_strunu": 
+                    return argumenti[0].split(argumenti[1])
                 else:
                     raise Exception("Funciton {} is not defined".format(naziv))
                 return None
@@ -161,11 +164,11 @@ class Executor(NodeVisitor):
         def visit_Vrati(self, node):
                 izraz = node.izraz
                 if isinstance(izraz, Naziv):
-                    if call_stack[-1].vars[izraz.naziv].tip.tip != call_stack[-1].tip:
-                        raise Exception("Returning {} instead of {} from {} function call".format(call_stack[-1].vars[izraz.naziv].tip.tip, call_stack[-1].tip, call_stack[-1].naziv))
-                    izraz = call_stack[-1].vars[izraz.naziv].vrednost
+                    if self.get_var(izraz.naziv).tip.tip != call_stack[-1].tip:
+                        raise Exception("Returning {} instead of {} from {} function call".format(self.get_var(izraz.naziv).tip.tip, call_stack[-1].tip, call_stack[-1].naziv))
+                    izraz = self.get_var(izraz.naziv).vrednost
                 if((call_stack[-1].tip == types[CEO_BROJ]
-                    and not izraz.isdigit())
+                    and not str(izraz).isdigit())
                         or (call_stack[-1].tip == types[JESTE_NIJE]
                             and not izraz == "jeste"
                             and not izraz == "nije")
@@ -189,18 +192,24 @@ class Executor(NodeVisitor):
         def visit_NaredbaPonavljanje(self, node):
                 pitanje = self.visit(node.pitanje)
                 while pitanje:
+                    block_stack.append({})
                     for cvor in node.ponovi.cvorovi:
                         self.visit(cvor)
                         if isinstance(node, PrekiniPonavljanje):
                             return
+                    block_stack.pop()
                     pitanje = self.visit(node.pitanje)
 
         def visit_CelinaCelina(self, node):
+                block_stack.append({})
+                res = None
                 for cvor in node.cvorovi:
                         if isinstance(cvor, Vrati):
-                            return self.visit(cvor)
+                            res = self.visit(cvor)
+                            break
                         self.visit(cvor)
-                return None
+                block_stack.pop()
+                return res
 
         def visit_CeoBroj(self, node):
                 return node.broj
@@ -209,7 +218,7 @@ class Executor(NodeVisitor):
                 return node.struna
 
         def visit_JesteNije(self, node):
-                return node.jestenije
+                return node.jestenije == "jeste"
 
         def visit_TipPodatka(self, node):
                 return node.tip
@@ -275,6 +284,14 @@ class Executor(NodeVisitor):
                 return None
 
         def add_var(self, tip, naziv):
+            naziv = naziv.lower()
+            if len(block_stack) > 0:
+                if naziv in block_stack[-1]:
+                    raise Exception("Variable {} is already defined".format(naziv))
+                block_stack[-1][naziv] = Var(tip, naziv)
+                if tip.tip == types[STRUNA]:
+                    block_stack[-1][naziv].vrednost = []
+                return
             if len(call_stack) > 0 and naziv not in call_stack[-1].vars:
                 call_stack[-1].vars[naziv] = Var(tip, naziv)
                 if tip.tip == types[STRUNA]:
@@ -287,6 +304,10 @@ class Executor(NodeVisitor):
                 raise Exception("Variable {} is already defined".format(naziv))
 
         def get_var(self, naziv):
+            naziv = naziv.lower()
+            for block in reversed(block_stack):
+                if naziv in block:
+                    return block[naziv]
             if len(call_stack) > 0 and naziv in call_stack[-1].vars:
                 return call_stack[-1].vars[naziv]
             elif naziv in vars:
@@ -295,6 +316,14 @@ class Executor(NodeVisitor):
                 raise Exception("Variable {} is not defined".format(naziv))
 
         def set_var(self, vrednost, naziv, indeksi=None):
+            naziv = naziv.lower()
+            for block in reversed(block_stack):
+                if naziv in block:
+                    if indeksi is None:
+                        block[naziv].vrednost = vrednost
+                    else:
+                        self.set_arr_var(vrednost, block[naziv].vrednost, indeksi)
+                    return
             if len(call_stack) > 0 and naziv in call_stack[-1].vars:
                 if indeksi is None:
                     call_stack[-1].vars[naziv].vrednost = vrednost
@@ -310,6 +339,7 @@ class Executor(NodeVisitor):
             prev_vrednost = None
             prev_indeks = None
             vrednost = niz
+            i = 0
             for indeks in indeksi:
                 if indeks is not None:
                     if isinstance(indeks, Naziv):
@@ -318,21 +348,31 @@ class Executor(NodeVisitor):
                         indeks = int(self.visit(indeks))
                     else:
                         indeks = int(indeks)
+                if vrednost is None:
+                    prev_vrednost[prev_indeks] = []
+                    vrednost = prev_vrednost[prev_indeks]
                 if indeks >= len(vrednost):
-                    vrednost.append(None)
+                    for i in range(indeks - len(vrednost) + 1):
+                        vrednost.append(None)
                 prev_vrednost = vrednost
                 prev_indeks = indeks
                 vrednost = vrednost[indeks]
+                i += 1
             prev_vrednost[prev_indeks] = nova
 
         def log_vars(self):
             print("*** GLOBAL SCOPE ***")
             for (naziv, var) in vars.items():
-                print("{}->{} {}={}".format(naziv, var.tip.tip, var.naziv, var.vrednost))
-            print("*** CALL STACK *** ")
-            for fun in call_stack:
-                for (naziv, var) in fun.vars.items():
-                    print("{}->{} {}={}".format(naziv, var.tip.tip, var.naziv, var.vrednost))
+                print("{} {}={}".format(var.tip.tip, var.naziv, var.vrednost))
+            if len(call_stack) > 0:
+                print("*** CALL STACK ***")
+                for fun in call_stack:
+                    for (naziv, var) in fun.vars.items():
+                        print("{} {}={}".format(var.tip.tip, var.naziv, var.vrednost))
+            if len(block_stack) > 0:
+                print("*** BLOCK STACK ***")
+                for (naziv, var) in block_stack[-1].items():
+                    print("{} {}={}".format(var.tip.tip, var.naziv, var.vrednost))
             print("---------- * ----------")
 
         def execute(self):
