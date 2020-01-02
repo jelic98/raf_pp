@@ -1,5 +1,5 @@
-from token import Token
-from type import *
+from app.token import Token
+from app.type import *
 
 class Lexer():
     def __init__(self, text, pos = 0):    

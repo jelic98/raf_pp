@@ -1,6 +1,6 @@
-from token import Token
-from type import *
-from lexer import Lexer
+from app.token import Token
+from app.type import *
+from app.lexer import Lexer
 
 # function map
 # --> def ; input_mode = 1
