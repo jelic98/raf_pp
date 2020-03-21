@@ -1,5 +1,7 @@
 # Project 2
 
+Interpreter and editor made from scratch for a custom programming language called *RAFLANG*. Take a look at [usage examples](https://github.com/jelic98/raf_pp/blob/master/project_2/doc/examples.pdf) and [context-free grammar](https://github.com/jelic98/raf_pp/blob/master/project_2/grammar.txt) for this language.
+
 ## Installing
 
 1. Clone repository
